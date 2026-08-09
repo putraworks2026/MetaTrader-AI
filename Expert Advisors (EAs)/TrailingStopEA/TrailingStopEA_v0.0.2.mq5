@@ -11,7 +11,7 @@
 #property description "Ideal for: Any trader who wants automated profit protection across open positions."
 #property strict
 
-#include "TrailingStopEA.mqh"
+#include "Include/TrailingStopEA.mqh"
 
 input ENUM_TRAIL_MODE InpMode        = TRAIL_FIXED;  // Trailing mode
 input double   InpFixedDistance      = 20;            // Fixed distance (points)

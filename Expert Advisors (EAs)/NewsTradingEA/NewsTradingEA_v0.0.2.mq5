@@ -11,7 +11,7 @@
 #property description "Ideal for: News traders who want to automate event-driven volatility capture."
 #property strict
 
-#include "NewsTradingEA.mqh"
+#include "Include/NewsTradingEA.mqh"
 
 input double   InpLotSize          = 0.01;    // Lot size
 input int      InpStopLoss         = 200;      // SL (points)

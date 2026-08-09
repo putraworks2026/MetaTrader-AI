@@ -1,17 +1,13 @@
 //+------------------------------------------------------------------+
-//| SetBreakevenAll_v0.0.2.mq5 — Script
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| SetBreakevenAll_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Scripts
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Set Breakeven for All — Moves all stop losses to entry price. Instant risk-free positions."
-#property description "Features: Breakeven for all open positions, optional buffer points above/below entry, confirmation dialog, and batch processing."
-#property description "Ideal for: Traders who want to quickly move all positions to breakeven for risk-free holding."
 #property script_show_inputs
 
-#include "SetBreakevenAll.mqh"
+#include "Include/SetBreakevenAll.mqh"
 
 input bool     InpOnlyProfitable  = true;    // Only modify profitable positions
 input double   InpMinProfit       = 0.0;     // Minimum profit to qualify

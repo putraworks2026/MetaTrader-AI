@@ -1,17 +1,13 @@
 //+------------------------------------------------------------------+
-//| ExportTradeHistory_v0.0.2.mq5 — Script
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| ExportTradeHistory_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Scripts
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Export Trade History to CSV — Exports closed trades for analysis and tax reporting. Compliance and analytics utility."
-#property description "Features: Configurable date range, full trade details (entry, exit, P/L, SL/TP), CSV format for spreadsheet import, and customizable columns."
-#property description "Ideal for: Traders who need trade history for performance analysis, tax filing, or journaling."
 #property script_show_inputs
 
-#include "ExportTradeHistory.mqh"
+#include "Include/ExportTradeHistory.mqh"
 
 input int      InpDays            = 30;      // Export last N days (0 = all)
 input string   InpFileName        = "TradeHistory.csv"; // Output filename

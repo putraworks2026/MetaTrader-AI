@@ -1,17 +1,14 @@
 //+------------------------------------------------------------------+
-//| OrderBlocks_v0.0.2.mq5 — Custom Indicator
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| OrderBlocks_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Custom Indicators
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Order Blocks (ICT) — Detects the last opposite candle before an impulse move, a core ICT concept for institutional trading zones."
-#property description "Features: Bullish and bearish order block detection, configurable impulse thresholds, zone mitigation tracking, and touch alerts."
-#property description "Ideal for: ICT traders who use order blocks for entry and exit zones."
+#property indicator_chart_window
 #property indicator_plots 0
 
-#include "OrderBlocks.mqh"
+#include "Include/OrderBlocks.mqh"
 
 input int      InpLookback        = 500;        // Bars to analyze
 input int      InpMinImpulse      = 150;        // Min impulse size (points)

@@ -1,17 +1,13 @@
 //+------------------------------------------------------------------+
-//| CloseAllTrades_v0.0.2.mq5 — Script
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| CloseAllTrades_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Scripts
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Close All Trades — Instantly closes every open position with one click. The #1 downloaded script on MQL5 Market."
-#property description "Features: Close profitable only, close losing only, or close all. Confirmation dialog, slippage control, and result summary."
-#property description "Ideal for: Every trader who needs instant position closure for risk management."
 #property script_show_inputs
 
-#include "CloseAllTrades.mqh"
+#include "Include/CloseAllTrades.mqh"
 
 input bool   InpCloseProfitable = true;   // Close profitable trades
 input bool   InpCloseLosing     = true;   // Close losing trades

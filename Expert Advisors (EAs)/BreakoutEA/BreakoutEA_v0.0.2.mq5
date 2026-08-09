@@ -11,7 +11,7 @@
 #property description "Ideal for: Breakout traders who want automated execution with volume confirmation."
 #property strict
 
-#include "BreakoutEA.mqh"
+#include "Include/BreakoutEA.mqh"
 
 input int      InpRangePeriod      = 20;        // Bars to detect range
 input int      InpVolumePeriod      = 10;        // Volume MA period

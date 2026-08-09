@@ -11,7 +11,7 @@
 #property description "Ideal for: Range traders who want set-and-forget grid profitability."
 #property strict
 
-#include "GridTradingEA.mqh"
+#include "Include/GridTradingEA.mqh"
 
 input double   InpLotSize          = 0.01;     // Lot size
 input int      InpGridSpacing      = 200;       // Grid spacing (points)

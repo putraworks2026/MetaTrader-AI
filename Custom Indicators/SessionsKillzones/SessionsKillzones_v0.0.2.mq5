@@ -1,17 +1,14 @@
 //+------------------------------------------------------------------+
-//| SessionsKillzones_v0.0.2.mq5 — Custom Indicator
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| SessionsKillzones_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Custom Indicators
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Sessions & Killzones — Displays London, New York, and Asian session boxes with ICT killzone highlighting."
-#property description "Features: Automatic session time detection, ICT killzone overlays (London Open, NY Open, Asian session), customizable colors, and session start alerts."
-#property description "Ideal for: ICT traders who need visual session timing and killzone awareness."
+#property indicator_chart_window
 #property indicator_plots 0
 
-#include "SessionsKillzones.mqh"
+#include "Include/SessionsKillzones.mqh"
 
 input bool     InpShowAsia      = true;       // Show Asian session
 input int      InpAsiaStart     = 0;          // Asia start hour (broker time)

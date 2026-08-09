@@ -1,17 +1,13 @@
 //+------------------------------------------------------------------+
-//| RiskCalculator_v0.0.2.mq5 — Script
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| RiskCalculator_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Scripts
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Risk Calculator (Lot Sizer) — Calculates lot size from SL distance and risk percentage. Prevents over-leveraging."
-#property description "Features: Risk % based lot calculation, SL distance input, account currency conversion, pip value detection, and visual risk display."
-#property description "Ideal for: Every serious trader who wants consistent risk management before every trade."
 #property script_show_inputs
 
-#include "RiskCalculator.mqh"
+#include "Include/RiskCalculator.mqh"
 
 input double   InpRiskPercent   = 1.0;    // Risk per trade (%)
 input double   InpAccountBalance = 0;      // 0 = use current balance

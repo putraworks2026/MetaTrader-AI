@@ -11,7 +11,7 @@
 #property description "Ideal for: Scalpers who want automated fast-trade execution with risk controls."
 #property strict
 
-#include "ScalpingEA.mqh"
+#include "Include/ScalpingEA.mqh"
 
 input int      InpFastMA          = 5;         // Fast EMA period
 input int      InpSlowMA          = 15;        // Slow EMA period

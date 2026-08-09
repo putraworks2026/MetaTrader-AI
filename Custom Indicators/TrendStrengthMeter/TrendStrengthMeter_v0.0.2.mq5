@@ -1,18 +1,14 @@
 //+------------------------------------------------------------------+
-//| TrendStrengthMeter_v0.0.2.mq5 — Custom Indicator
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| TrendStrengthMeter_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Custom Indicators
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Trend Strength Meter — Multi-timeframe ADX-based trend dashboard that filters bad entries by showing trend strength at a glance."
-#property description "Features: Multi-timeframe ADX analysis, trend direction and strength display, configurable thresholds, dashboard panel rendering, and weak-trend alerts."
-#property description "Ideal for: Trend traders who need a quick visual filter across multiple timeframes."
-#property indicator_separate_window
+#property indicator_chart_window
 #property indicator_plots 0
 
-#include "TrendStrengthMeter.mqh"
+#include "Include/TrendStrengthMeter.mqh"
 
 input int      InpADXPeriod      = 14;       // ADX period
 input double   InpTrendThreshold  = 25.0;     // ADX threshold for strong trend

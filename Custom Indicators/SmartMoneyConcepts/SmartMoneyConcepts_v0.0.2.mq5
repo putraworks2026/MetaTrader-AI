@@ -1,17 +1,14 @@
 //+------------------------------------------------------------------+
-//| SmartMoneyConcepts_v0.0.2.mq5 — Custom Indicator
-//| Copyright 2026, PutraWorks
-//| MQL5 Market Submission Build
+//| SmartMoneyConcepts_v0.0.2.mq5 — Publish Entry Point
+//| MetaTrader AI — Custom Indicators
+//| Version: v0.0.2
 //+------------------------------------------------------------------+
-#property copyright "PutraWorks"
+#property copyright "MetaTrader AI"
 #property version   "1.01"
-#property link       "https://www.mql5.com"
-#property description "Smart Money Concepts (SMC) — All-in-one ICT indicator combining BOS, CHoCH, Order Blocks, Fair Value Gaps, and liquidity zones."
-#property description "Features: Break of Structure (BOS) detection, Change of Character (CHoCH) signals, Order Block rendering, FVG detection, liquidity zone mapping, and comprehensive alerts."
-#property description "Ideal for: ICT/SMC traders who want a complete institutional trading toolkit in one indicator."
+#property indicator_chart_window
 #property indicator_plots 0
 
-#include "SmartMoneyConcepts.mqh"
+#include "Include/SmartMoneyConcepts.mqh"
 
 input int      InpLookback        = 1000;       // Bars to analyze
 input int      InpSwingPeriod     = 5;          // Swing detection period (fractal bars)

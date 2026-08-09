@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| VolumeProfile.mqh — Include file for VolumeProfile
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __VOLUMEPROFILE_MQH__
 #define __VOLUMEPROFILE_MQH__

@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| SmartMoneyConcepts.mqh — Include file for SmartMoneyConcepts
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __SMARTMONEYCONCEPTS_MQH__
 #define __SMARTMONEYCONCEPTS_MQH__

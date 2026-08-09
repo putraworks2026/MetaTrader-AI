@@ -7,7 +7,7 @@
 #define __TIMESESSION_MQH__
 
 #property copyright "MetaTrader AI"
-#property version   "1.01"
+#property version   "1.02"
 
 //--- Session definitions (broker time hours)
 struct TradingSession

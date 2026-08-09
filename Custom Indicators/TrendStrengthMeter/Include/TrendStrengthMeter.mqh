@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| TrendStrengthMeter.mqh — Include file for TrendStrengthMeter
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __TRENDSTRENGTHMETER_MQH__
 #define __TRENDSTRENGTHMETER_MQH__

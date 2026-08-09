@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| SessionsKillzones.mqh — Include file for SessionsKillzones
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __SESSIONSKILLZONES_MQH__
 #define __SESSIONSKILLZONES_MQH__

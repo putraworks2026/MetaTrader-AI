@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| ExportTradeHistory.mqh — Include file for ExportTradeHistory
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __EXPORTTRADEHISTORY_MQH__
 #define __EXPORTTRADEHISTORY_MQH__

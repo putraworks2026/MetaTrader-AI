@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| LiquidityZones.mqh — Include file for LiquidityZones
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __LIQUIDITYZONES_MQH__
 #define __LIQUIDITYZONES_MQH__

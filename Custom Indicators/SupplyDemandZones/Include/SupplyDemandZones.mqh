@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| SupplyDemandZones.mqh — Include file for SupplyDemandZones
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __SUPPLYDEMANDZONES_MQH__
 #define __SUPPLYDEMANDZONES_MQH__

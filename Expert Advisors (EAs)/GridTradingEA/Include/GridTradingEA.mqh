@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| GridTradingEA.mqh — Include file for GridTradingEA
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __GRIDTRADINGEA_MQH__
 #define __GRIDTRADINGEA_MQH__

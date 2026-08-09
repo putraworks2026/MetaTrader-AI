@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| AutoSupportResistance.mqh — Include file for AutoSupportResistance
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __AUTOSUPPORTRESISTANCE_MQH__
 #define __AUTOSUPPORTRESISTANCE_MQH__

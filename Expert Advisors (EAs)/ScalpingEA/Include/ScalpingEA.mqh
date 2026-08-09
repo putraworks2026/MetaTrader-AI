@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| ScalpingEA.mqh — Include file for ScalpingEA
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __SCALPINGEA_MQH__
 #define __SCALPINGEA_MQH__

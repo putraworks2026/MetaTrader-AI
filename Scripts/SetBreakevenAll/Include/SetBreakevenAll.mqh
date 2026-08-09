@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| SetBreakevenAll.mqh — Include file for SetBreakevenAll
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __SETBREAKEVENALL_MQH__
 #define __SETBREAKEVENALL_MQH__

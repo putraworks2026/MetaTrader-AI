@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| TrailingStopEA.mqh — Include file for TrailingStopEA
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __TRAILINGSTOPEA_MQH__
 #define __TRAILINGSTOPEA_MQH__

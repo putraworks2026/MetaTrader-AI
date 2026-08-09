@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| NewsTradingEA.mqh — Include file for NewsTradingEA
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __NEWSTRADINGEA_MQH__
 #define __NEWSTRADINGEA_MQH__

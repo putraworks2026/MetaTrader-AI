@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| BreakoutEA.mqh — Include file for BreakoutEA
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __BREAKOUTEA_MQH__
 #define __BREAKOUTEA_MQH__

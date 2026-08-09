@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| OrderBlocks.mqh — Include file for OrderBlocks
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __ORDERBLOCKS_MQH__
 #define __ORDERBLOCKS_MQH__

@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| DeleteAllPending.mqh — Include file for DeleteAllPending
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __DELETEALLPENDING_MQH__
 #define __DELETEALLPENDING_MQH__

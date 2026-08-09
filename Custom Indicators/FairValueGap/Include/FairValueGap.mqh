@@ -1,7 +1,7 @@
 //+------------------------------------------------------------------+
 //| FairValueGap.mqh — Include file for FairValueGap
 //| MetaTrader AI — Function Library
-//| Version: v0.0.2
+//| Version: v0.0.3
 //+------------------------------------------------------------------+
 #ifndef __FAIRVALUEGAP_MQH__
 #define __FAIRVALUEGAP_MQH__

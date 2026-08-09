@@ -7,7 +7,7 @@
 #define __RISKMANAGER_MQH__
 
 #property copyright "MetaTrader AI"
-#property version   "1.01"
+#property version   "1.02"
 
 //--- Risk configuration structure
 struct RiskConfig

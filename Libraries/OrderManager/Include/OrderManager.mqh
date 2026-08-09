@@ -7,7 +7,7 @@
 #define __ORDERMANAGER_MQH__
 
 #property copyright "MetaTrader AI"
-#property version   "1.01"
+#property version   "1.02"
 
 #include <Trade/Trade.mqh>
 

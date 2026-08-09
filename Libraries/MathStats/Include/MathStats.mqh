@@ -7,7 +7,7 @@
 #define __MATHSTATS_MQH__
 
 #property copyright "MetaTrader AI"
-#property version   "1.01"
+#property version   "1.02"
 
 //--- Mean of an array
 double ArrayMean(const double &arr[], int count = -1)

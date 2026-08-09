@@ -1,0 +1,17 @@
+//+------------------------------------------------------------------+
+//| RiskCalculator.mqh — Include file for RiskCalculator
+//| MetaTrader AI — Function Library
+//| Version: v0.0.2
+//+------------------------------------------------------------------+
+#ifndef __RISKCALCULATOR_MQH__
+#define __RISKCALCULATOR_MQH__
+
+//+------------------------------------------------------------------+
+//|                                            RiskCalculator.mq5  |
+//|                              MetaTrader AI - Scripts             |
+//|          #3 — Lot size from SL distance and risk %               |
+//+------------------------------------------------------------------+
+
+
+
+#endif // __RISKCALCULATOR_MQH__

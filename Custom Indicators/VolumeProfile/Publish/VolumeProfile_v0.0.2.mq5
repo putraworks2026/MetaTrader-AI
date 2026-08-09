@@ -1,15 +1,16 @@
 //+------------------------------------------------------------------+
-//| VolumeProfile_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Custom Indicators
-//| Version: v0.0.2
+//| VolumeProfile_v0.0.2.mq5 — Custom Indicator
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
-#property indicator_separate_window
-#property indicator_plots 1
-#property indicator_label1  "Volume Profile"
-#property indicator_type1    DRAW_COLOR_HISTOGRAM
-#property indicator_width1   2
+#property link       "https://www.mql5.com"
+#property description "Volume Profile — Displays volume at price levels, an essential tool for identifying high-interest price zones."
+#property description "Features: Configurable session range, POC (Point of Control) detection, value area calculation, histogram rendering, and POC touch alerts."
+#property description "Ideal for: Professional traders who use volume analysis for entries, exits, and target zones."
+#property indicator_chart_window
+#property indicator_plots 0
 
 #include "VolumeProfile.mqh"
 

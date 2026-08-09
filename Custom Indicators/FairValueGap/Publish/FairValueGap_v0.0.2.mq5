@@ -1,11 +1,14 @@
 //+------------------------------------------------------------------+
-//| FairValueGap_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Custom Indicators
-//| Version: v0.0.2
+//| FairValueGap_v0.0.2.mq5 — Custom Indicator
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
-#property indicator_chart_window
+#property link       "https://www.mql5.com"
+#property description "Fair Value Gap (FVG) Detector — Identifies 3-candle imbalance zones used in ICT/SMC trading strategies."
+#property description "Features: Automatic FVG detection (bullish and bearish), configurable gap thresholds, visual zone rendering, and fill alerts."
+#property description "Ideal for: ICT traders, Smart Money Concept traders, and price action analysts who trade imbalances."
 #property indicator_plots 0
 
 #include "FairValueGap.mqh"

@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| BreakoutEA_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Expert Advisors (EAs)
-//| Version: v0.0.2
+//| BreakoutEA_v0.0.2.mq5 — Expert Advisor
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "Breakout EA — Trades range breakouts with a volume filter for confirmation. Designed for trending market conditions."
+#property description "Features: Automatic range detection, volume-based breakout confirmation, ATR-based SL/TP, trailing stop, session filtering, and max spread protection."
+#property description "Ideal for: Breakout traders who want automated execution with volume confirmation."
 #property strict
 
 #include "BreakoutEA.mqh"

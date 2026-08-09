@@ -1,11 +1,14 @@
 //+------------------------------------------------------------------+
-//| LiquidityZones_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Custom Indicators
-//| Version: v0.0.2
+//| LiquidityZones_v0.0.2.mq5 — Custom Indicator
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
-#property indicator_chart_window
+#property link       "https://www.mql5.com"
+#property description "Liquidity Zones — Detects equal highs and lows that form liquidity pools, key for predicting stop-hunt scenarios."
+#property description "Features: Equal highs/lows detection, configurable tolerance, liquidity pool visualization, and sweep alerts."
+#property description "Ideal for: SMC traders who track institutional liquidity and stop-hunt patterns."
 #property indicator_plots 0
 
 #include "LiquidityZones.mqh"

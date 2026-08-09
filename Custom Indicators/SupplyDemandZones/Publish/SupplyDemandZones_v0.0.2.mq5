@@ -1,11 +1,14 @@
 //+------------------------------------------------------------------+
-//| SupplyDemandZones_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Custom Indicators
-//| Version: v0.0.2
+//| SupplyDemandZones_v0.0.2.mq5 — Custom Indicator
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
-#property indicator_chart_window
+#property link       "https://www.mql5.com"
+#property description "Supply & Demand Zones — Automatically draws institutional supply and demand zones, the #1 requested feature on MQL5 Market."
+#property description "Features: Auto zone detection from price action, configurable zone strength, unmitigated/mitigated tracking, fresh zone alerts, and customizable visual rendering."
+#property description "Ideal for: Supply/demand traders, institutional price action analysts, and anyone who trades from zones."
 #property indicator_plots 0
 
 #include "SupplyDemandZones.mqh"

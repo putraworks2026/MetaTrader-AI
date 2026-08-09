@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| TrailingStopEA_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Expert Advisors (EAs)
-//| Version: v0.0.2
+//| TrailingStopEA_v0.0.2.mq5 — Expert Advisor
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "Trailing Stop EA — Locks in profit with smart trailing stop algorithms. Universal utility for any trading style."
+#property description "Features: ATR-based trailing, fixed-point trailing, step trailing, breakeven activation, and per-position trailing management."
+#property description "Ideal for: Any trader who wants automated profit protection across open positions."
 #property strict
 
 #include "TrailingStopEA.mqh"

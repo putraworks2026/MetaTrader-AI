@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| GridTradingEA_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Expert Advisors (EAs)
-//| Version: v0.0.2
+//| GridTradingEA_v0.0.2.mq5 — Expert Advisor
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "Grid Trading EA — Profits in ranging markets with a configurable grid system. Consistently top-selling on MQL5 Market."
+#property description "Features: Configurable grid spacing and levels, dynamic lot sizing, grid direction mode (buy/sell/both), max drawdown protection, and daily loss limits."
+#property description "Ideal for: Range traders who want set-and-forget grid profitability."
 #property strict
 
 #include "GridTradingEA.mqh"

@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| NewsTradingEA_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Expert Advisors (EAs)
-//| Version: v0.0.2
+//| NewsTradingEA_v0.0.2.mq5 — Expert Advisor
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "News Trading EA — Automatically trades high-impact news events. Captures volatility spikes during economic releases."
+#property description "Features: Economic calendar integration, configurable pre/post news trade windows, straddle order placement, volatility-based SL/TP, and news impact filtering."
+#property description "Ideal for: News traders who want to automate event-driven volatility capture."
 #property strict
 
 #include "NewsTradingEA.mqh"

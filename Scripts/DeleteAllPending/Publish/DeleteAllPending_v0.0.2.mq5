@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| DeleteAllPending_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Scripts
-//| Version: v0.0.2
+//| DeleteAllPending_v0.0.2.mq5 — Script
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "Delete All Pending Orders — Removes all pending orders in one click. Essential risk management utility."
+#property description "Features: Filter by order type (buy/sell/both), confirmation dialog, and batch deletion with result summary."
+#property description "Ideal for: Traders who need to quickly clear pending orders before news or at session end."
 #property script_show_inputs
 
 #include "DeleteAllPending.mqh"

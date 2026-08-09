@@ -1,11 +1,14 @@
 //+------------------------------------------------------------------+
-//| FibonacciAutoDraw_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Custom Indicators
-//| Version: v0.0.2
+//| FibonacciAutoDraw_v0.0.2.mq5 — Custom Indicator
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
-#property indicator_chart_window
+#property link       "https://www.mql5.com"
+#property description "Fibonacci Auto-Draw — Automatically identifies swing highs/lows and draws Fibonacci retracement levels with confluence alerts."
+#property description "Features: Auto swing detection, configurable lookback, standard and custom fib levels, confluence zone highlighting, and retracement alerts."
+#property description "Ideal for: Trend traders who use Fibonacci for entries, exits, and target zones."
 #property indicator_plots 0
 
 #include "FibonacciAutoDraw.mqh"

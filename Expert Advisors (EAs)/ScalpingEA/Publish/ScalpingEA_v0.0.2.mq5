@@ -1,10 +1,14 @@
 //+------------------------------------------------------------------+
-//| ScalpingEA_v0.0.2.mq5 — Publish Entry Point
-//| MetaTrader AI — Expert Advisors (EAs)
-//| Version: v0.0.2
+//| ScalpingEA_v0.0.2.mq5 — Expert Advisor
+//| Copyright 2026, PutraWorks
+//| MQL5 Market Submission Build
 //+------------------------------------------------------------------+
-#property copyright "MetaTrader AI"
+#property copyright "PutraWorks"
 #property version   "1.01"
+#property link       "https://www.mql5.com"
+#property description "Scalping EA — Fast in-and-out trades with tight spreads. Highest search volume of any EA type on MQL5 Market."
+#property description "Features: RSI-based scalping signals, micro TP targets, spread filter, max positions control, and rapid trade execution."
+#property description "Ideal for: Scalpers who want automated fast-trade execution with risk controls."
 #property strict
 
 #include "ScalpingEA.mqh"

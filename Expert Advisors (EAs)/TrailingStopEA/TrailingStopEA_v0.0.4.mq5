@@ -12,6 +12,31 @@
 #property strict
 
 #include "Include/TrailingStopEA_v0.0.4.mqh"
+//--- ML Engine Includes (Tool-Specific)
+#include "Include\\Config_v0.0.4.mqh"
+#include "Include\\IndicatorEngine_v0.0.4.mqh"
+#include "Include\\RiskManager_v0.0.4.mqh"
+#include "Include\\TradingJournal_v0.0.4.mqh"
+#include "Include\\LearningEngine_v0.0.4.mqh"
+#include "Include\\PatternRecognition_v0.0.4.mqh"
+#include "Include\\StrategyEvolution_v0.0.4.mqh"
+#include "Include\\OptimizationEngine_v0.0.4.mqh"
+#include "Include\\ReportGenerator_v0.0.4.mqh"
+#include "Include\\Dashboard_v0.0.4.mqh"
+#include "Include\\NewsManager_v0.0.4.mqh"
+
+//--- ML Global Objects (EA)
+CRiskManager         g_riskManager;
+CTradingJournal      g_journal;
+CLearningEngine      g_learning;
+CPatternRecognition  g_patterns;
+CStrategyEvolution   g_evolution;
+COptimizationEngine  g_optimizer;
+CReportGenerator     g_reports;
+CDashboard           g_dashboard;
+CNewsManager         g_newsManager;
+CIndicatorEngine     g_indicators;
+
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"
@@ -25,17 +50,7 @@
 #include "Include\\Dashboard.mqh"
 #include "Include\\NewsManager.mqh"
 
-//--- ML Global Objects
-CRiskManager         g_riskManager;
-CTradingJournal      g_journal;
-CLearningEngine      g_learning;
-CPatternRecognition  g_patterns;
-CStrategyEvolution   g_evolution;
-COptimizationEngine  g_optimizer;
-CReportGenerator     g_reports;
-CDashboard           g_dashboard;
-CNewsManager         g_newsManager;
-CIndicatorEngine     g_indicators;
+
 
 
 

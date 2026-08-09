@@ -9,6 +9,19 @@
 #property indicator_plots 0
 
 #include "Include/TrendStrengthMeter_v0.0.4.mqh"
+//--- ML Engine Includes (Tool-Specific)
+#include "Include\\SignalConfig_v0.0.4.mqh"
+#include "Include\\SignalJournal_v0.0.4.mqh"
+#include "Include\\SignalLearning_v0.0.4.mqh"
+#include "Include\\SignalPatterns_v0.0.4.mqh"
+#include "Include\\SignalDashboard_v0.0.4.mqh"
+
+//--- ML Global Objects (Indicator)
+CSignalJournal       g_signalJournal;
+CSignalLearning      g_signalLearning;
+CSignalPatterns      g_signalPatterns;
+CSignalDashboard     g_signalDashboard;
+
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"
@@ -22,17 +35,7 @@
 #include "Include\\Dashboard.mqh"
 #include "Include\\NewsManager.mqh"
 
-//--- ML Global Objects
-CRiskManager         g_riskManager;
-CTradingJournal      g_journal;
-CLearningEngine      g_learning;
-CPatternRecognition  g_patterns;
-CStrategyEvolution   g_evolution;
-COptimizationEngine  g_optimizer;
-CReportGenerator     g_reports;
-CDashboard           g_dashboard;
-CNewsManager         g_newsManager;
-CIndicatorEngine     g_indicators;
+
 
 
 

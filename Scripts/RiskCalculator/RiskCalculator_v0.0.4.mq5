@@ -8,6 +8,13 @@
 #property script_show_inputs
 
 #include "Include/RiskCalculator_v0.0.4.mqh"
+//--- ML Engine Includes (Tool-Specific)
+#include "Include\\ExecConfig_v0.0.4.mqh"
+#include "Include\\ExecJournal_v0.0.4.mqh"
+
+//--- ML Global Objects (Script)
+CExecJournal         g_execJournal;
+
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"
@@ -21,17 +28,7 @@
 #include "Include\\Dashboard.mqh"
 #include "Include\\NewsManager.mqh"
 
-//--- ML Global Objects
-CRiskManager         g_riskManager;
-CTradingJournal      g_journal;
-CLearningEngine      g_learning;
-CPatternRecognition  g_patterns;
-CStrategyEvolution   g_evolution;
-COptimizationEngine  g_optimizer;
-CReportGenerator     g_reports;
-CDashboard           g_dashboard;
-CNewsManager         g_newsManager;
-CIndicatorEngine     g_indicators;
+
 
 
 

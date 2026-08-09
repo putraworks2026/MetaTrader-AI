@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include\\CloseAllTrades_v0.0.4.mqh"
+#include "Include/CloseAllTrades_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\ExecConfig_v0.0.4.mqh"
 #include "Include\\ExecJournal_v0.0.4.mqh"
@@ -44,7 +44,6 @@ void ML_LogExecution(ENUM_EXEC_RESULT result, int itemsProcessed, string details
     ExecEntry ee; InitExecEntry(ee);
     ee.id = g_execJournal.GetNextId();
     ee.execTime = TimeCurrent();
-    ee.execDuration = 0; // could use GetTickCount before/after
     ee.result = result;
     ee.itemsProcessed = itemsProcessed;
     ee.details = details;
@@ -114,5 +113,6 @@ void OnStart()
     }
 
     PrintFormat("Close All complete: %d closed, %d failed, P/L: %.2f", closed, failed, totalProfit);
+}
     ML_OnDeinit();
 }

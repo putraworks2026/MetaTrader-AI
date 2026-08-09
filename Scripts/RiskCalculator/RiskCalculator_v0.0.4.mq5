@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include\\RiskCalculator_v0.0.4.mqh"
+#include "Include/RiskCalculator_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\ExecConfig_v0.0.4.mqh"
 #include "Include\\ExecJournal_v0.0.4.mqh"
@@ -46,7 +46,6 @@ void ML_LogExecution(ENUM_EXEC_RESULT result, int itemsProcessed, string details
     ExecEntry ee; InitExecEntry(ee);
     ee.id = g_execJournal.GetNextId();
     ee.execTime = TimeCurrent();
-    ee.execDuration = 0; // could use GetTickCount before/after
     ee.result = result;
     ee.itemsProcessed = itemsProcessed;
     ee.details = details;
@@ -155,5 +154,6 @@ void OnStart()
 
         PrintFormat("Order placed: %s %.2f lots at %.5f", EnumToString(InpDirection), lotSize, price);
     }
+}
     ML_OnDeinit();
 }

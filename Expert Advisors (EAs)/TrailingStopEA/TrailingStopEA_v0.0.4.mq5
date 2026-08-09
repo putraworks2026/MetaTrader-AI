@@ -11,7 +11,7 @@
 #property description "Ideal for: Any trader who wants automated profit protection across open positions."
 #property strict
 
-#include "Include\\TrailingStopEA_v0.0.4.mqh"
+#include "Include/TrailingStopEA_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\Config_v0.0.4.mqh"
 #include "Include\\IndicatorEngine_v0.0.4.mqh"
@@ -80,32 +80,7 @@ void ML_Init()
 
 void ML_OnTick()
 {
-    // News filter — block trading during high-impact news
-    if(g_newsManager.IsNewsBlocked())
-    {
-        return;
-    }
-}
-
-void ML_OnTradeClosed(double profit, bool won)
-{
-    g_riskManager.OnTradeClosed(profit);
-    
-    // Journal the trade
-    JournalEntry je; InitJournalEntry(je);
-    je.profit = profit;
-    je.outcome = won ? OUTCOME_WIN : OUTCOME_LOSS;
-    je.regime = g_indicators.GetSnapshot().regime;
-    je.spreadAtEntry = g_indicators.GetSpread();
-    g_journal.WriteEntry(je);
-    
-    // Learn from the trade
-    g_learning.AnalyzeTrade(je);
-    g_learning.SaveLessons();
-    
-    // Update evolution stats
-    int profileId = g_evolution.GetActiveProfileId();
-    g_evolution.UpdateStats(profileId, won, profit);
+    if(g_newsManager.IsNewsBlocked()) return;
 }
 
 void ML_OnDeinit()
@@ -117,14 +92,8 @@ void ML_OnDeinit()
 
 void ML_UpdateDashboard()
 {
-    ParameterSet ps = g_evolution.GetActiveProfile();
-    g_dashboard.Update(
-        g_evolution.GetSummary(),
-        g_learning.GetLessonCount(),
-        g_patterns.GetPatternCount(),
-        g_optimizer.GetPendingCount(),
-        g_riskManager.GetDailyPnL()
-    );
+    g_dashboard.Update(g_evolution.GetSummary(), g_learning.GetLessonCount(),
+        g_patterns.GetPatternCount(), g_optimizer.GetPendingCount(), g_riskManager.GetDailyPnL());
 }
 
 int OnInit()

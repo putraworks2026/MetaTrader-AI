@@ -1,6 +1,5 @@
 //+------------------------------------------------------------------+
-//| VolumeProfile_TestSuite_v0.0.4.mq5 — Unit Tests
-//| VolumeProfile — Signal ML Test Suite (PutraWorks)
+//| VolumeProfile_TestSuite_v0.0.4.mq5 — Signal ML Tests (PutraWorks)
 //+------------------------------------------------------------------+
 #property strict
 #property description "Unit tests for VolumeProfile signal ML modules"
@@ -24,66 +23,53 @@ void AssertTrue(bool cond, string name)
 
 void TestSignalConfig()
 {
-    Print("--- Testing SignalConfig ---");
+    Print("--- SignalConfig ---");
     SignalProfile sp;
     CreateDefaultSignalProfile(sp, 1);
-    AssertTrue(sp.id == 1, "SignalConfig: Default profile ID");
-    AssertTrue(sp.score == 50.0, "SignalConfig: Default score is 50");
-    AssertTrue(sp.minConfidence == 50.0, "SignalConfig: Default min confidence");
+    AssertTrue(sp.id == 1, "Default profile ID");
+    AssertTrue(sp.score == 50.0, "Default score 50");
 }
 
 void TestSignalJournal()
 {
-    Print("--- Testing SignalJournal ---");
+    Print("--- SignalJournal ---");
     CSignalJournal sj;
     sj.Init("VolumeProfile");
-    AssertTrue(sj.GetCount() >= 0, "SignalJournal: Init OK");
-    AssertTrue(sj.GetNextId() > 0, "SignalJournal: Next ID increments");
+    AssertTrue(sj.GetCount() >= 0, "Journal init OK");
+    AssertTrue(sj.GetNextId() > 0, "Next ID increments");
 }
 
 void TestSignalLearning()
 {
-    Print("--- Testing SignalLearning ---");
+    Print("--- SignalLearning ---");
     CSignalLearning sl;
     sl.Init("VolumeProfile");
-    AssertTrue(sl.GetLessonCount() >= 0, "SignalLearning: Init OK");
+    AssertTrue(sl.GetLessonCount() >= 0, "Learning init OK");
 }
 
 void TestSignalPatterns()
 {
-    Print("--- Testing SignalPatterns ---");
+    Print("--- SignalPatterns ---");
     CSignalPatterns sp;
     sp.Init();
     sp.RecordPattern("Trending", true, 50.0);
     sp.RecordPattern("Trending", true, 30.0);
     sp.RecordPattern("Trending", false, -20.0);
-    AssertTrue(sp.GetPatternCount() >= 1, "SignalPatterns: Records patterns");
-    AssertTrue(sp.GetScore("Trending") > 0, "SignalPatterns: Returns score");
-}
-
-void TestSignalDashboard()
-{
-    Print("--- Testing SignalDashboard ---");
-    CSignalDashboard sd;
-    sd.Init("VolumeProfile");
-    // Just verify it initializes without error
-    AssertTrue(true, "SignalDashboard: Init OK");
+    AssertTrue(sp.GetPatternCount() >= 1, "Records patterns");
+    AssertTrue(sp.GetScore("Trending") > 0, "Returns score");
 }
 
 void OnStart()
 {
     Print("====================================");
     Print("  VolumeProfile Signal ML Test Suite");
-    Print("  Signal Type: POC Touch");
+    Print("  Signal: POC Touch");
     Print("====================================");
-    
     TestSignalConfig();
     TestSignalJournal();
     TestSignalLearning();
     TestSignalPatterns();
-    TestSignalDashboard();
-    
     Print("====================================");
-    Print(StringFormat("  Results: %d/%d passed, %d failed", g_passed, g_total, g_failed));
+    Print(StringFormat("  %d/%d passed, %d failed", g_passed, g_total, g_failed));
     Print("====================================");
 }

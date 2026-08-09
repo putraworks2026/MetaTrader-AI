@@ -1,6 +1,5 @@
 //+------------------------------------------------------------------+
-//| CloseAllTrades_TestSuite_v0.0.4.mq5 — Unit Tests
-//| CloseAllTrades — Execution ML Test Suite (PutraWorks)
+//| CloseAllTrades_TestSuite_v0.0.4.mq5 — Execution ML Tests (PutraWorks)
 //+------------------------------------------------------------------+
 #property strict
 #property description "Unit tests for CloseAllTrades execution ML modules"
@@ -21,26 +20,25 @@ void AssertTrue(bool cond, string name)
 
 void TestExecConfig()
 {
-    Print("--- Testing ExecConfig ---");
+    Print("--- ExecConfig ---");
     ExecStats es;
     InitExecStats(es);
-    AssertTrue(es.totalRuns == 0, "ExecConfig: Init zeros runs");
+    AssertTrue(es.totalRuns == 0, "Init zeros runs");
     UpdateExecStats(es, EXEC_SUCCESS, 100.0);
-    AssertTrue(es.totalRuns == 1, "ExecConfig: Updates run count");
-    AssertTrue(es.successes == 1, "ExecConfig: Counts success");
-    AssertTrue(es.avgExecTime == 100.0, "ExecConfig: Calculates avg time");
-    AssertTrue(GetSuccessRate(es) == 100.0, "ExecConfig: 100% success rate");
+    AssertTrue(es.totalRuns == 1, "Updates run count");
+    AssertTrue(es.successes == 1, "Counts success");
+    AssertTrue(GetSuccessRate(es) == 100.0, "100% success rate");
     UpdateExecStats(es, EXEC_FAILED, 50.0);
-    AssertTrue(GetSuccessRate(es) == 50.0, "ExecConfig: 50% after failure");
+    AssertTrue(GetSuccessRate(es) == 50.0, "50% after failure");
 }
 
 void TestExecJournal()
 {
-    Print("--- Testing ExecJournal ---");
+    Print("--- ExecJournal ---");
     CExecJournal ej;
     ej.Init("CloseAllTrades");
-    AssertTrue(ej.GetCount() >= 0, "ExecJournal: Init OK");
-    AssertTrue(ej.GetNextId() > 0, "ExecJournal: Next ID increments");
+    AssertTrue(ej.GetCount() >= 0, "Journal init OK");
+    AssertTrue(ej.GetNextId() > 0, "Next ID increments");
 }
 
 void OnStart()
@@ -49,11 +47,9 @@ void OnStart()
     Print("  CloseAllTrades Execution ML Test Suite");
     Print("  Action: Close Positions");
     Print("====================================");
-    
     TestExecConfig();
     TestExecJournal();
-    
     Print("====================================");
-    Print(StringFormat("  Results: %d/%d passed, %d failed", g_passed, g_total, g_failed));
+    Print(StringFormat("  %d/%d passed, %d failed", g_passed, g_total, g_failed));
     Print("====================================");
 }

@@ -8,7 +8,7 @@
 #property indicator_chart_window
 #property indicator_plots 0
 
-#include "Include\\TrendStrengthMeter_v0.0.4.mqh"
+#include "Include/TrendStrengthMeter_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\SignalConfig_v0.0.4.mqh"
 #include "Include\\SignalJournal_v0.0.4.mqh"
@@ -66,57 +66,17 @@ void ML_OnSignal(string signalType, double price, ENUM_SIGNAL_QUALITY quality, d
     se.signalType = signalType;
     se.quality = quality;
     se.confidence = confidence;
-    se.weekday = ((MqlDateTime){{0}}).mon; // placeholder
     MqlDateTime dt; TimeToStruct(TimeCurrent(), dt);
     se.weekday = dt.day_of_week;
     se.hour = dt.hour;
-    se.session = (dt.hour >= 7 && dt.hour <= 12) ? "London" : 
-                 (dt.hour >= 13 && dt.hour <= 17) ? "NewYork" : "Asia";
+    se.session = (dt.hour >= 7 && dt.hour <= 12) ? "London" : (dt.hour >= 13 && dt.hour <= 17) ? "NewYork" : "Asia";
     g_signalJournal.WriteEntry(se);
-}
-
-void ML_AnalyzeSignals()
-{
-    SignalEntry entries[];
-    int count = g_signalJournal.ReadAll(entries);
-    for(int i = 0; i < count; i++)
-    {
-        if(entries[i].outcome == SIGNAL_PENDING)
-        {
-            // Check if enough bars have passed to evaluate
-            int barsSince = iBarShift(_Symbol, _Period, entries[i].signalTime);
-            if(barsSince >= 10)
-            {
-                double price10 = iClose(_Symbol, _Period, barsSince - 10);
-                double favorable = MathAbs(price10 - entries[i].signalPrice);
-                if(favorable > 0)
-                {
-                    entries[i].outcome = SIGNAL_SUCCESS;
-                    entries[i].maxFavorable = favorable;
-                }
-                else
-                {
-                    entries[i].outcome = SIGNAL_FAILED;
-                }
-                g_signalLearning.AnalyzeSignal(entries[i]);
-            }
-        }
-    }
-    g_signalLearning.SaveLessons();
 }
 
 void ML_UpdateDashboard()
 {
-    int total = g_signalJournal.GetCount();
-    g_signalDashboard.Update(
-        "ADX Trend Strength",
-        total,
-        0, // successes — simplified
-        0, // failures
-        0.0, // success rate
-        g_signalLearning.GetTopInsight(),
-        0 // pattern count
-    );
+    g_signalDashboard.Update("ADX Trend Strength", g_signalJournal.GetCount(), 0, 0, 0.0,
+        g_signalLearning.GetTopInsight(), 0);
 }
 
 void ML_OnDeinit()

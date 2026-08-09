@@ -1,24 +1,27 @@
-# Expert Advisors (EAs) — Trader Demand Ranking
+# Expert Advisors — Trader Demand Ranking
 
 Ranked by market demand, search volume, and what traders actively pay for.
 
-| Rank | EA Type | Why Traders Buy It | Price Range |
-|------|---------|-------------------|------------|
-| 1 | **Grid Trading EA** | Profits in ranging markets — consistently top-selling on MQL5 Market | $50–$300 |
-| 2 | **Scalping EA** | Fast in-and-out trades — highest search volume of any EA type | $30–$200 |
-| 3 | **News Trading EA** | Auto-trades high-impact news events — volatile but profitable | $40–$150 |
-| 4 | **Martingale EA** | Recovery-style grid — controversial but massive demand | $30–$200 |
-| 5 | **Trailing Stop EA** | Locks in profit with smart trailing — universal utility | $15–$60 |
-| 6 | **Breakout EA** | Trades range breakouts — simple concept, always in demand | $25–$100 |
-| 7 | **Hedging EA** | Opens opposite positions to reduce risk — popular in forex | $30–$120 |
-| 8 | **Risk Management EA** | Auto lot sizing, daily loss limits — every serious trader needs one | $20–$80 |
-| 9 | **Partial Close EA** | Takes partial profits at targets — scales out positions | $15–$50 |
-| 10 | **Time-Based EA** | Closes all trades at a specific time — session-close utility | $10–$40 |
+| Rank | EA | Why Traders Buy It | ML Features | Price Range |
+|------|-----|-------------------|-------------|------------|
+| 1 | **ScalpingEA** | Fast execution scalping — highest demand on MQL5 Market | Spread learning, micro-pattern detection | $50–$200 |
+| 2 | **GridTradingEA** | Grid trading with recovery — popular in volatile markets | Grid pattern scoring, range detection | $40–$150 |
+| 3 | **BreakoutEA** | Volume-confirmed breakouts — classic strategy with broad appeal | Breakout pattern learning, false breakout detection | $30–$100 |
+| 4 | **NewsTradingEA** | Straddle news trading — event-driven traders need this | News impact learning, spike/reversal patterns | $30–$100 |
+| 5 | **TrailingStopEA** | Smart trailing stops — essential risk management tool | Trail method optimization, trend adaptation | $20–$80 |
+| — | **AIEA_Trader** | Reference architecture (not for sale) | Full 11-module ML stack | N/A |
 
 ---
 
+## ML Self-Improvement
+
+All EAs (except AIEA_Trader which is the reference) have tool-specific ML with:
+- **Unique parameters** per EA (e.g., ScalpingEA tracks spread impact, BreakoutEA tracks range tightness)
+- **Unique patterns** per EA (e.g., GridTradingEA tracks RangeBound/GridRecovery, NewsTradingEA tracks HighImpactSpike/PostNewsReversal)
+- **Unique lessons** per EA extracted from real trade outcomes
+
 ## Buying Signals
 
-- **Tier 1 (Rank 1–3):** Grid, Scalping, News — dominate MQL5 Market revenue. Traders want set-and-forget profitability.
-- **Tier 2 (Rank 4–6):** Martingale, Trailing Stop, Breakout — high download volume, mid-tier pricing.
-- **Tier 3 (Rank 7–10):** Hedging, Risk Management, Partial Close, Time-Based — utility EAs that protect capital.
+- **Tier 1 (Rank 1–2):** ScalpingEA, GridTradingEA — highest volume, traders need fast execution and recovery
+- **Tier 2 (Rank 3–4):** BreakoutEA, NewsTradingEA — classic strategies with ML edge
+- **Tier 3 (Rank 5):** TrailingStopEA — risk management utility, broad appeal

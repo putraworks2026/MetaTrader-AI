@@ -1,7 +1,15 @@
-# Publish — MQL5 Market Submission Assets
+# Publish — LiquidityZones MQL5 Market Submission
 
 This folder contains submission-related files for LiquidityZones.
 
-The compile-ready .mq5 file is located at the tool root: `../LiquidityZones_v0.0.3.mq5`
+The compile-ready .mq5 file is at the tool root: `../LiquidityZones_v0.0.4.mq5`
 
-Place screenshots, product descriptions, and other Market submission assets here.
+Place the following MQL5 Market submission assets here:
+- Screenshots (chart examples, signal display, dashboard)
+- Product description text
+- Video demonstration link
+- Market category tags
+
+**Current version**: v0.0.4
+**ML modules**: 5 (signal-focused)
+**Signal type**: Liquidity Sweep

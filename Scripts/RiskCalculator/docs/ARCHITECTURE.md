@@ -1,143 +1,66 @@
 # RiskCalculator — Architecture
 
-## System Overview
+## Overview
 
-RiskCalculator is a self-improving MQL5 Expert Advisor for MetaTrader 5. It trades autonomously, maintains a detailed journal of every trade, analyzes performance patterns, and continuously optimizes its strategy parameters based on statistical evidence.
+Calculates lot size from risk % and SL distance. Part of the PutraWorks MetaTrader-AI collection.
 
-## Module Architecture
+## Action Type
+
+This script performs: **Calculate Lot Size**
+
+## ML Module Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    RiskCalculator.mq5                        │
-│                   (Main EA Entry Point)                   │
-├──────────┬──────────┬──────────┬──────────┬─────────────┤
-│  Config  │ Indicator │   Risk   │ Trading  │  Learning   │
-│  .mqh    │ Engine    │ Manager  │ Journal  │  Engine     │
-│          │ .mqh     │ .mqh     │ .mqh     │ .mqh        │
-├──────────┼──────────┴──────────┴──────────┼─────────────┤
-│  Pattern  │       Strategy Evolution       │ Optimization │
-│ Recognition│       .mqh                     │ Engine .mqh  │
-│ .mqh      │                                │              │
-├───────────┴────────────────────────────────┴──────────────┤
-│         Report Generator .mqh    │   Dashboard .mqh      │
-└───────────────────────────────────┴───────────────────────┘
+│                  RiskCalculator_v0.0.4.mq5                       │
+│               (Main Script Entry Point)                  │
+├──────────────────────────────────────────┬──────────────┤
+│ ExecConfig                               │ ExecJournal  │
+│ _v0.0.4.mqh                             │ _v0.0.4.mqh  │
+└──────────────────────────────────────────┴──────────────┘
+```
+
+## ML Modules (2 files — execution-focused)
+
+| Module | File | Purpose |
+|--------|------|---------|
+| ExecConfig | ExecConfig_v0.0.4.mqh | Execution result enums, ExecStats struct (success/fail/partial tracking) |
+| ExecJournal | ExecJournal_v0.0.4.mqh | Logs each Calculate Lot Size execution with duration, items processed, result |
+
+## Why No Learning/Optimization Modules?
+
+Scripts are one-shot utilities — they run once, perform an action, and stop. They don't need:
+- Pattern recognition (no recurring patterns to track)
+- Learning engine (no continuous trading to learn from)
+- Strategy evolution (no profiles to manage)
+- Optimization engine (no parameters to adapt)
+
+The ML simply tracks execution success rates and logs each run.
+
+## Include Chain
+
+```
+ExecConfig (base — no dependencies)
+  └── ExecJournal → ExecConfig
 ```
 
 ## File Structure
 
 ```
-RiskCalculator-Trader/
-├── MQL5/
-│   ├── Experts/
-│   │   └── RiskCalculator.mq5        # Main EA file
-│   └── Include/
-│       └── RiskCalculator/
-│           ├── Config.mqh          # Enums, structs, parameter sets
-│           ├── IndicatorEngine.mqh  # Technical indicator management
-│           ├── RiskManager.mqh      # Position sizing, safety controls
-│           ├── TradingJournal.mqh   # File-based trade journal database
-│           ├── LearningEngine.mqh   # Post-trade analysis & lessons
-│           ├── PatternRecognition.mqh # Pattern detection & ranking
-│           ├── StrategyEvolution.mqh  # Multi-profile management
-│           ├── OptimizationEngine.mqh # Adaptive parameter optimization
-│           ├── ReportGenerator.mqh   # Daily/weekly/monthly reports
-│           └── Dashboard.mqh        # On-chart performance display
-├── Tests/
-│   └── RiskCalculator_TestSuite.mq5         # Unit tests
-└── docs/
-    ├── ARCHITECTURE.md            # This file
-    └── USER_GUIDE.md              # User guide
+RiskCalculator/
+├── RiskCalculator_v0.0.4.mq5              # Main file — compile this
+├── Include/
+│   ├── RiskCalculator_v0.0.4.mqh           # Core script logic
+│   ├── ExecConfig_v0.0.4.mqh      # Execution config
+│   └── ExecJournal_v0.0.4.mqh     # Execution journal
+├── Tests/RiskCalculator_TestSuite_v0.0.4.mq5
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── USER_GUIDE.md
+│   └── CHANGELOG.md
+├── Publish/README.md
+└── Archive/                       # Previous versions (read-only)
+    ├── RiskCalculator_v0.0.1.mq5
+    ├── RiskCalculator_v0.0.2.mq5
+    └── RiskCalculator_v0.0.3.mq5
 ```
-
-## Data Flow
-
-### 1. Trade Execution Flow
-```
-OnTick → IsNewBar → EvaluateSignal → CheckRisk → OpenTrade → RecordPending
-```
-
-### 2. Trade Analysis Flow
-```
-OnTradeTransaction → ProcessClosedTrade → LearningEngine.AnalyzeTrade
-  → AssessEntryTiming → AssessExitTiming → AssessStopLoss → AssessTakeProfit
-  → GenerateLesson → CalculatePerformanceImpact → WriteToJournal
-```
-
-### 3. Optimization Flow
-```
-RunOptimizationCycle (every N minutes) → UpdateAllProfileScores
-  → OptimizationEngine.RunOptimization → ProposeChanges
-  → [Auto-approve or Manual Approve] → ApplyApprovedChanges → SaveProfiles
-```
-
-### 4. Strategy Evolution Flow
-```
-ProfileScoreUpdate → CompareProfiles → PromoteBestProfile
-  → RetirePoorProfiles → [Revert if performance degrades]
-```
-
-## Key Design Decisions
-
-### File-Based Storage
-The journal and profile data use MQL5 file I/O (CSV format) stored in the `MQL5/Files/RiskCalculator/` directory. This persists across terminal restarts and is human-readable.
-
-### Statistical Significance
-Parameter changes are only proposed after a configurable minimum number of trades (`InpMinEvidenceTrades`, default 10). Single wins/losses never trigger changes.
-
-### Safety First
-- Position size is **never** increased automatically — only decreased for poorly performing profiles
-- Daily loss and drawdown limits halt all trading
-- User can review and approve/reject every proposed parameter change
-- Previous parameter profiles are retained for rollback
-
-### Indicator Suite
-The EA uses 6 indicators in combination:
-- RSI (Relative Strength Index)
-- Fast EMA & Slow EMA (Moving Average crossover)
-- Bollinger Bands (volatility + mean reversion)
-- MACD (momentum)
-- Stochastic (overbought/oversold)
-- ATR (volatility for SL/TP placement)
-
-### Market Regime Detection
-Based on ATR%, Bollinger Band width, and MA separation:
-- **Trending**: Significant MA separation
-- **Ranging**: MAs close together, moderate BB width
-- **Volatile**: High ATR% and wide BB width
-- **Unknown**: Insufficient data
-
-### Confidence Scoring
-Entry confidence (0-100) is calculated by summing indicator agreements:
-- RSI alignment: up to 20 points
-- MA crossover alignment: up to 15 points
-- MACD alignment: up to 15 points
-- Stochastic alignment: up to 10 points
-- Bollinger Band position: up to 10 points
-- Regime bonus: up to 10 points
-
-A trade is only entered if confidence exceeds `minConfidence` (default 60).
-
-### Profile Management
-- Up to 10 concurrent parameter profiles
-- Each profile has its own performance score
-- The active profile can be switched manually or auto-promoted
-- Poor profiles can be retired
-- Full rollback history maintained
-
-## Installation
-
-1. Copy `RiskCalculator.mq5` to `MQL5/Experts/` in your MT5 data folder
-2. Copy the entire `RiskCalculator/` folder to `MQL5/Include/`
-3. Compile in MetaEditor (F7)
-4. Attach to a chart and configure input parameters
-5. The EA will create `MQL5/Files/RiskCalculator/` for journal and profile data
-
-## Testing
-
-1. Copy `RiskCalculator_TestSuite.mq5` to `MQL5/Scripts/`
-2. Compile and run in MetaEditor
-3. Results are printed to the Experts tab
-
-## Backtesting
-
-The EA supports MT5 Strategy Tester with a custom optimization criterion that combines profit factor, trade count, and win rate.

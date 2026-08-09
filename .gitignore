@@ -1,0 +1,30 @@
+# MT5 Build Artifacts
+*.ex5
+*.ex4
+*.ex
+*.log
+
+# MT5 Cache
+cache/
+*.cache
+
+# MT5 Terminal
+terminal.ini
+ticks/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor Files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary Files
+*.tmp
+*.bak
+*.orig

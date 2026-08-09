@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include/ExportTradeHistory.mqh"
+#include "Include/ExportTradeHistory_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

@@ -11,7 +11,7 @@
 #property description "Ideal for: Range traders who want set-and-forget grid profitability."
 #property strict
 
-#include "Include/GridTradingEA.mqh"
+#include "Include/GridTradingEA_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

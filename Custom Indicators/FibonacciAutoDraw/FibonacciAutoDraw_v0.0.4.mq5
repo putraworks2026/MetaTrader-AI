@@ -8,7 +8,7 @@
 #property indicator_chart_window
 #property indicator_plots 0
 
-#include "Include/FibonacciAutoDraw.mqh"
+#include "Include/FibonacciAutoDraw_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

@@ -11,7 +11,7 @@
 #property description "Ideal for: Any trader who wants automated profit protection across open positions."
 #property strict
 
-#include "Include/TrailingStopEA.mqh"
+#include "Include/TrailingStopEA_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

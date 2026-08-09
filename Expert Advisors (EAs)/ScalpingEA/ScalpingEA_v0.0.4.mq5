@@ -11,7 +11,7 @@
 #property description "Ideal for: Scalpers who want automated fast-trade execution with risk controls."
 #property strict
 
-#include "Include/ScalpingEA.mqh"
+#include "Include/ScalpingEA_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

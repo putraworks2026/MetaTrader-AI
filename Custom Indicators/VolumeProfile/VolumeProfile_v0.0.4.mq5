@@ -11,7 +11,7 @@
 #property indicator_type1    DRAW_COLOR_HISTOGRAM
 #property indicator_width1   2
 
-#include "Include/VolumeProfile.mqh"
+#include "Include/VolumeProfile_v0.0.4.mqh"
 //--- ML Engine Includes (AIEA Architecture)
 #include "Include\\Config.mqh"
 #include "Include\\IndicatorEngine.mqh"

@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include/DeleteAllPending_v0.0.4.mqh"
+#include "Include\\DeleteAllPending_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\ExecConfig_v0.0.4.mqh"
 #include "Include\\ExecJournal_v0.0.4.mqh"
@@ -15,18 +15,6 @@
 //--- ML Global Objects (Script)
 CExecJournal         g_execJournal;
 
-//--- ML Engine Includes (AIEA Architecture)
-#include "Include\\Config.mqh"
-#include "Include\\IndicatorEngine.mqh"
-#include "Include\\RiskManager.mqh"
-#include "Include\\TradingJournal.mqh"
-#include "Include\\LearningEngine.mqh"
-#include "Include\\PatternRecognition.mqh"
-#include "Include\\StrategyEvolution.mqh"
-#include "Include\\OptimizationEngine.mqh"
-#include "Include\\ReportGenerator.mqh"
-#include "Include\\Dashboard.mqh"
-#include "Include\\NewsManager.mqh"
 
 
 
@@ -41,8 +29,40 @@ input bool   InpDeleteStops    = true;   // Delete stop orders
 input bool   InpConfirmDialog   = true;   // Show confirmation
 input int    InpSlippage        = 30;     // Slippage
 
+
+//==================================================================
+//  ML EXECUTION TRACKING
+//==================================================================
+
+void ML_Init()
+{
+    g_execJournal.Init("DeleteAllPending");
+    Print("[ML] DeleteAllPending execution tracking initialized");
+}
+
+void ML_LogExecution(ENUM_EXEC_RESULT result, int itemsProcessed, string details)
+{
+    ExecEntry ee; InitExecEntry(ee);
+    ee.id = g_execJournal.GetNextId();
+    ee.execTime = TimeCurrent();
+    ee.execDuration = 0; // could use GetTickCount before/after
+    ee.result = result;
+    ee.itemsProcessed = itemsProcessed;
+    ee.details = details;
+    MqlDateTime dt; TimeToStruct(TimeCurrent(), dt);
+    ee.weekday = dt.day_of_week;
+    ee.hour = dt.hour;
+    g_execJournal.WriteEntry(ee);
+}
+
+void ML_OnDeinit()
+{
+    Print("[ML] DeleteAllPending execution tracking shutdown");
+}
+
 void OnStart()
 {
+    ML_Init();
     int total = OrdersTotal();
 
     if(total == 0)
@@ -97,4 +117,5 @@ void OnStart()
     }
 
     PrintFormat("Delete All Pending complete: %d deleted, %d failed", deleted, failed);
+    ML_OnDeinit();
 }

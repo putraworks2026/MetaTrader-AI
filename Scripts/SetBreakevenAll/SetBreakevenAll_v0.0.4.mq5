@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include/SetBreakevenAll_v0.0.4.mqh"
+#include "Include\\SetBreakevenAll_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\ExecConfig_v0.0.4.mqh"
 #include "Include\\ExecJournal_v0.0.4.mqh"
@@ -15,18 +15,6 @@
 //--- ML Global Objects (Script)
 CExecJournal         g_execJournal;
 
-//--- ML Engine Includes (AIEA Architecture)
-#include "Include\\Config.mqh"
-#include "Include\\IndicatorEngine.mqh"
-#include "Include\\RiskManager.mqh"
-#include "Include\\TradingJournal.mqh"
-#include "Include\\LearningEngine.mqh"
-#include "Include\\PatternRecognition.mqh"
-#include "Include\\StrategyEvolution.mqh"
-#include "Include\\OptimizationEngine.mqh"
-#include "Include\\ReportGenerator.mqh"
-#include "Include\\Dashboard.mqh"
-#include "Include\\NewsManager.mqh"
 
 
 
@@ -40,8 +28,40 @@ input double   InpLockProfit      = 0.0;     // Lock this amount of profit (0 = 
 input int      InpDeviation        = 30;      // Slippage in points
 input bool     InpConfirmDialog    = true;    // Show confirmation
 
+
+//==================================================================
+//  ML EXECUTION TRACKING
+//==================================================================
+
+void ML_Init()
+{
+    g_execJournal.Init("SetBreakevenAll");
+    Print("[ML] SetBreakevenAll execution tracking initialized");
+}
+
+void ML_LogExecution(ENUM_EXEC_RESULT result, int itemsProcessed, string details)
+{
+    ExecEntry ee; InitExecEntry(ee);
+    ee.id = g_execJournal.GetNextId();
+    ee.execTime = TimeCurrent();
+    ee.execDuration = 0; // could use GetTickCount before/after
+    ee.result = result;
+    ee.itemsProcessed = itemsProcessed;
+    ee.details = details;
+    MqlDateTime dt; TimeToStruct(TimeCurrent(), dt);
+    ee.weekday = dt.day_of_week;
+    ee.hour = dt.hour;
+    g_execJournal.WriteEntry(ee);
+}
+
+void ML_OnDeinit()
+{
+    Print("[ML] SetBreakevenAll execution tracking shutdown");
+}
+
 void OnStart()
 {
+    ML_Init();
     int total = PositionsTotal();
 
     if(total == 0)
@@ -142,4 +162,5 @@ void OnStart()
     }
 
     PrintFormat("Breakeven complete: %d modified, %d skipped, %d failed", modified, skipped, failed);
+    ML_OnDeinit();
 }

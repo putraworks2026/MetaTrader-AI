@@ -7,7 +7,7 @@
 #property version   "1.03"
 #property script_show_inputs
 
-#include "Include/RiskCalculator_v0.0.4.mqh"
+#include "Include\\RiskCalculator_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\ExecConfig_v0.0.4.mqh"
 #include "Include\\ExecJournal_v0.0.4.mqh"
@@ -15,18 +15,6 @@
 //--- ML Global Objects (Script)
 CExecJournal         g_execJournal;
 
-//--- ML Engine Includes (AIEA Architecture)
-#include "Include\\Config.mqh"
-#include "Include\\IndicatorEngine.mqh"
-#include "Include\\RiskManager.mqh"
-#include "Include\\TradingJournal.mqh"
-#include "Include\\LearningEngine.mqh"
-#include "Include\\PatternRecognition.mqh"
-#include "Include\\StrategyEvolution.mqh"
-#include "Include\\OptimizationEngine.mqh"
-#include "Include\\ReportGenerator.mqh"
-#include "Include\\Dashboard.mqh"
-#include "Include\\NewsManager.mqh"
 
 
 
@@ -42,8 +30,40 @@ input bool     InpShowPanel      = true;   // Show results on chart
 input bool     InpPlaceOrders    = false;   // Place orders automatically
 input ENUM_ORDER_TYPE InpDirection = ORDER_TYPE_BUY; // Buy or Sell
 
+
+//==================================================================
+//  ML EXECUTION TRACKING
+//==================================================================
+
+void ML_Init()
+{
+    g_execJournal.Init("RiskCalculator");
+    Print("[ML] RiskCalculator execution tracking initialized");
+}
+
+void ML_LogExecution(ENUM_EXEC_RESULT result, int itemsProcessed, string details)
+{
+    ExecEntry ee; InitExecEntry(ee);
+    ee.id = g_execJournal.GetNextId();
+    ee.execTime = TimeCurrent();
+    ee.execDuration = 0; // could use GetTickCount before/after
+    ee.result = result;
+    ee.itemsProcessed = itemsProcessed;
+    ee.details = details;
+    MqlDateTime dt; TimeToStruct(TimeCurrent(), dt);
+    ee.weekday = dt.day_of_week;
+    ee.hour = dt.hour;
+    g_execJournal.WriteEntry(ee);
+}
+
+void ML_OnDeinit()
+{
+    Print("[ML] RiskCalculator execution tracking shutdown");
+}
+
 void OnStart()
 {
+    ML_Init();
     string symbol = _Symbol;
 
     // Use account balance or custom
@@ -135,4 +155,5 @@ void OnStart()
 
         PrintFormat("Order placed: %s %.2f lots at %.5f", EnumToString(InpDirection), lotSize, price);
     }
+    ML_OnDeinit();
 }

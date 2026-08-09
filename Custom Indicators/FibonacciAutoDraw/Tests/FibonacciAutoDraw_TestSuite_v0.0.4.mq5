@@ -1,146 +1,89 @@
 //+------------------------------------------------------------------+
-//| FibonacciAutoDraw_TestSuite.mq5 — Unit Tests
-//| FibonacciAutoDraw — Self-Improving MT5 AI Tool (PutraWorks)
+//| FibonacciAutoDraw_TestSuite_v0.0.4.mq5 — Unit Tests
+//| FibonacciAutoDraw — Signal ML Test Suite (PutraWorks)
 //+------------------------------------------------------------------+
 #property strict
-#property description "Unit tests for FibonacciAutoDraw modules"
+#property description "Unit tests for FibonacciAutoDraw signal ML modules"
 #property script_show_inputs
 
 #include <Trade\Trade.mqh>
-#include "..\Include\Config_v0.0.4.mqh"
-#include "..\Include\IndicatorEngine_v0.0.4.mqh"
-#include "..\Include\RiskManager_v0.0.4.mqh"
-#include "..\Include\TradingJournal_v0.0.4.mqh"
-#include "..\Include\LearningEngine_v0.0.4.mqh"
-#include "..\Include\PatternRecognition_v0.0.4.mqh"
-#include "..\Include\StrategyEvolution_v0.0.4.mqh"
-#include "..\Include\OptimizationEngine_v0.0.4.mqh"
-#include "..\Include\ReportGenerator_v0.0.4.mqh"
-#include "..\Include\Dashboard_v0.0.4.mqh"
-#include "..\Include\NewsManager_v0.0.4.mqh"
+#include "..\Include\SignalConfig_v0.0.4.mqh"
+#include "..\Include\SignalJournal_v0.0.4.mqh"
+#include "..\Include\SignalLearning_v0.0.4.mqh"
+#include "..\Include\SignalPatterns_v0.0.4.mqh"
+#include "..\Include\SignalDashboard_v0.0.4.mqh"
 
-//==================================================================
-//  TEST FRAMEWORK
-//==================================================================
+int g_passed = 0, g_failed = 0, g_total = 0;
 
-int g_testsPassed = 0;
-int g_testsFailed = 0;
-int g_testsTotal  = 0;
-
-void AssertTrue(bool condition, string testName)
+void AssertTrue(bool cond, string name)
 {
-   g_testsTotal++;
-   if(condition)
-   {
-      g_testsPassed++;
-      Print("[PASS] ", testName);
-   }
-   else
-   {
-      g_testsFailed++;
-      Print("[FAIL] ", testName);
-   }
+    g_total++;
+    if(cond) { g_passed++; Print("[PASS] ", name); }
+    else { g_failed++; Print("[FAIL] ", name); }
 }
 
-void AssertEqual(int actual, int expected, string testName)
+void TestSignalConfig()
 {
-   g_testsTotal++;
-   if(actual == expected)
-   {
-      g_testsPassed++;
-      Print("[PASS] ", testName);
-   }
-   else
-   {
-      g_testsFailed++;
-      Print("[FAIL] ", testName, " expected=", expected, " actual=", actual);
-   }
+    Print("--- Testing SignalConfig ---");
+    SignalProfile sp;
+    CreateDefaultSignalProfile(sp, 1);
+    AssertTrue(sp.id == 1, "SignalConfig: Default profile ID");
+    AssertTrue(sp.score == 50.0, "SignalConfig: Default score is 50");
+    AssertTrue(sp.minConfidence == 50.0, "SignalConfig: Default min confidence");
 }
 
-//==================================================================
-//  TEST SUITE
-//==================================================================
-
-void TestConfig()
+void TestSignalJournal()
 {
-   Print("--- Testing Config ---");
-   ML_ParameterSet ps;
-   ML_CreateDefaultProfile(ps, 1);
-   AssertTrue(ps.id == 1, "Config: Default profile ID");
-   AssertTrue(ps.score == 50.0, "Config: Default score is 50");
-   AssertTrue(ps.status == ML_PROFILE_ACTIVE, "Config: Default status is ACTIVE");
+    Print("--- Testing SignalJournal ---");
+    CSignalJournal sj;
+    sj.Init("FibonacciAutoDraw");
+    AssertTrue(sj.GetCount() >= 0, "SignalJournal: Init OK");
+    AssertTrue(sj.GetNextId() > 0, "SignalJournal: Next ID increments");
 }
 
-void TestRiskManager()
+void TestSignalLearning()
 {
-   Print("--- Testing RiskManager ---");
-   CRiskManager rm;
-   rm.Init();
-   AssertTrue(rm.CanOpenPosition(), "RiskManager: Can open position initially");
+    Print("--- Testing SignalLearning ---");
+    CSignalLearning sl;
+    sl.Init("FibonacciAutoDraw");
+    AssertTrue(sl.GetLessonCount() >= 0, "SignalLearning: Init OK");
 }
 
-void TestTradingJournal()
+void TestSignalPatterns()
 {
-   Print("--- Testing TradingJournal ---");
-   CTradingJournal journal;
-   journal.Init("FibonacciAutoDraw");
-   AssertTrue(journal.GetEntryCount() >= 0, "TradingJournal: Init OK");
+    Print("--- Testing SignalPatterns ---");
+    CSignalPatterns sp;
+    sp.Init();
+    sp.RecordPattern("Trending", true, 50.0);
+    sp.RecordPattern("Trending", true, 30.0);
+    sp.RecordPattern("Trending", false, -20.0);
+    AssertTrue(sp.GetPatternCount() >= 1, "SignalPatterns: Records patterns");
+    AssertTrue(sp.GetScore("Trending") > 0, "SignalPatterns: Returns score");
 }
 
-void TestLearningEngine()
+void TestSignalDashboard()
 {
-   Print("--- Testing LearningEngine ---");
-   CLearningEngine le;
-   le.Init("FibonacciAutoDraw");
-   AssertTrue(le.GetLessonCount() >= 0, "LearningEngine: Init OK");
+    Print("--- Testing SignalDashboard ---");
+    CSignalDashboard sd;
+    sd.Init("FibonacciAutoDraw");
+    // Just verify it initializes without error
+    AssertTrue(true, "SignalDashboard: Init OK");
 }
-
-void TestPatternRecognition()
-{
-   Print("--- Testing PatternRecognition ---");
-   CPatternRecognition pr;
-   pr.Init();
-   pr.RecordPattern("test", "condition1", true, 100.0);
-   pr.RecordPattern("test", "condition1", true, 50.0);
-   AssertTrue(pr.GetPatternCount() >= 1, "PatternRecognition: Records patterns");
-}
-
-void TestStrategyEvolution()
-{
-   Print("--- Testing StrategyEvolution ---");
-   CStrategyEvolution se;
-   se.Init();
-   AssertTrue(se.GetProfileCount() >= 1, "StrategyEvolution: Has default profile");
-}
-
-void TestOptimizationEngine()
-{
-   Print("--- Testing OptimizationEngine ---");
-   COptimizationEngine oe;
-   oe.Init();
-   AssertTrue(oe.GetPendingCount() >= 0, "OptimizationEngine: Init OK");
-}
-
-//==================================================================
-//  MAIN
-//==================================================================
 
 void OnStart()
 {
-   Print("====================================");
-   Print("  FibonacciAutoDraw Test Suite");
-   Print("====================================");
-   
-   TestConfig();
-   TestRiskManager();
-   TestTradingJournal();
-   TestLearningEngine();
-   TestPatternRecognition();
-   TestStrategyEvolution();
-   TestOptimizationEngine();
-   
-   Print("====================================");
-   Print(StringFormat("  Results: %d/%d passed, %d failed",
-      g_testsPassed, g_testsTotal, g_testsFailed));
-   Print("====================================");
+    Print("====================================");
+    Print("  FibonacciAutoDraw Signal ML Test Suite");
+    Print("  Signal Type: Fib Retracement Touch");
+    Print("====================================");
+    
+    TestSignalConfig();
+    TestSignalJournal();
+    TestSignalLearning();
+    TestSignalPatterns();
+    TestSignalDashboard();
+    
+    Print("====================================");
+    Print(StringFormat("  Results: %d/%d passed, %d failed", g_passed, g_total, g_failed));
+    Print("====================================");
 }

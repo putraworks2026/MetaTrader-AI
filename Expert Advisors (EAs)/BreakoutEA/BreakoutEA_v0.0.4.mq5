@@ -11,7 +11,7 @@
 #property description "Ideal for: Breakout traders who want automated execution with volume confirmation."
 #property strict
 
-#include "Include/BreakoutEA_v0.0.4.mqh"
+#include "Include\\BreakoutEA_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\Config_v0.0.4.mqh"
 #include "Include\\IndicatorEngine_v0.0.4.mqh"
@@ -37,18 +37,6 @@ CDashboard           g_dashboard;
 CNewsManager         g_newsManager;
 CIndicatorEngine     g_indicators;
 
-//--- ML Engine Includes (AIEA Architecture)
-#include "Include\\Config.mqh"
-#include "Include\\IndicatorEngine.mqh"
-#include "Include\\RiskManager.mqh"
-#include "Include\\TradingJournal.mqh"
-#include "Include\\LearningEngine.mqh"
-#include "Include\\PatternRecognition.mqh"
-#include "Include\\StrategyEvolution.mqh"
-#include "Include\\OptimizationEngine.mqh"
-#include "Include\\ReportGenerator.mqh"
-#include "Include\\Dashboard.mqh"
-#include "Include\\NewsManager.mqh"
 
 
 
@@ -74,8 +62,78 @@ input int      InpStartHour       = 7;            // Session start
 input int      InpEndHour         = 20;           // Session end
 input int      InpRangeMinPoints   = 50;          // Min range size (points)
 
+
+//==================================================================
+//  ML ENGINE INTEGRATION
+//==================================================================
+
+void ML_Init()
+{
+    g_riskManager.Init();
+    g_journal.Init("BreakoutEA");
+    g_learning.Init("BreakoutEA");
+    g_evolution.Init();
+    g_optimizer.Init(10, false);
+    g_reports.Init("BreakoutEA");
+    g_dashboard.Init("BreakoutEA");
+    g_newsManager.Init(30);
+    g_newsManager.UpdateCalendar();
+    g_indicators.Init(_Symbol, _Period);
+    Print("[ML] BreakoutEA engine initialized");
+}
+
+void ML_OnTick()
+{
+    // News filter — block trading during high-impact news
+    if(g_newsManager.IsNewsBlocked())
+    {
+        return;
+    }
+}
+
+void ML_OnTradeClosed(double profit, bool won)
+{
+    g_riskManager.OnTradeClosed(profit);
+    
+    // Journal the trade
+    JournalEntry je; InitJournalEntry(je);
+    je.profit = profit;
+    je.outcome = won ? OUTCOME_WIN : OUTCOME_LOSS;
+    je.regime = g_indicators.GetSnapshot().regime;
+    je.spreadAtEntry = g_indicators.GetSpread();
+    g_journal.WriteEntry(je);
+    
+    // Learn from the trade
+    g_learning.AnalyzeTrade(je);
+    g_learning.SaveLessons();
+    
+    // Update evolution stats
+    int profileId = g_evolution.GetActiveProfileId();
+    g_evolution.UpdateStats(profileId, won, profit);
+}
+
+void ML_OnDeinit()
+{
+    g_learning.SaveLessons();
+    g_dashboard.Cleanup();
+    Print("[ML] BreakoutEA engine shutdown");
+}
+
+void ML_UpdateDashboard()
+{
+    ParameterSet ps = g_evolution.GetActiveProfile();
+    g_dashboard.Update(
+        g_evolution.GetSummary(),
+        g_learning.GetLessonCount(),
+        g_patterns.GetPatternCount(),
+        g_optimizer.GetPendingCount(),
+        g_riskManager.GetDailyPnL()
+    );
+}
+
 int OnInit()
 {
+    ML_Init();
     trade.SetExpertMagicNumber(InpMagicNumber);
     trade.SetDeviationInPoints(InpSlippage);
 
@@ -91,11 +149,13 @@ int OnInit()
 
 void OnDeinit(const int reason)
 {
+    ML_OnDeinit();
     IndicatorRelease(handleVolume);
 }
 
 void OnTick()
 {
+    ML_OnTick();
     datetime currentBar = iTime(_Symbol, PERIOD_CURRENT, 0);
     if(currentBar == lastBarTime) return;
 

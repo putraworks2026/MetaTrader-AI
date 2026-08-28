@@ -37,16 +37,16 @@ datetime GetNextNewsEvent()
     int n = StringSplit(InpNewsCountries, ',', countries);
 
     // Get calendar events
-    MqlCalendarEvent events[];
+    MqlCalendarEvent event;
     int total = CalendarValueHistory(values, from, to, NULL, NULL);
 
     for(int i = 0; i < ArraySize(values); i++)
     {
         ulong eventId = values[i].event_id;
-        if(!CalendarEventById(eventId, events)) continue;
+        if(!CalendarEventById(eventId, event)) continue;
 
         // Check importance
-        if(events[0].importance < InpMinImportance) continue;
+        if(event.importance < InpMinImportance) continue;
 
         // Check country
         bool countryMatch = false;
@@ -55,11 +55,11 @@ datetime GetNextNewsEvent()
             string country = countries[c];
             StringTrimLeft(country);
             StringTrimRight(country);
-            if(events[0].country_code == country) { countryMatch = true; break; }
+            if(event.country_id == country) { countryMatch = true; break; }
         }
         if(!countryMatch) continue;
 
-        pendingNewsName = events[0].name;
+        pendingNewsName = event.name;
         return values[i].time;
     }
 

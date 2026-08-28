@@ -82,11 +82,13 @@ jobs:
           }
           $libSrc = "Libraries"
           if (Test-Path $libSrc) {
+            $libIncDir = Join-Path $mqlDir "Include"
+            if (-not (Test-Path $libIncDir)) { New-Item -ItemType Directory -Force -Path $libIncDir | Out-Null }
             Get-ChildItem $libSrc -Directory | ForEach-Object {
               $inc = Join-Path $_.FullName "Include"
               if (Test-Path $inc) {
                 Get-ChildItem $inc -Filter "*.mqh" | ForEach-Object {
-                  Copy-Item $_.FullName (Join-Path $mqlDir "Include\$($_.Name)") -Force
+                  Copy-Item $_.FullName (Join-Path $libIncDir "$($_.Name)") -Force
                 }
               }
             }

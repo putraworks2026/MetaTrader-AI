@@ -45,6 +45,18 @@ input bool     InpShowHVN         = true;     // Show High Volume Nodes
 input bool     InpShowLVN         = true;     // Show Low Volume Nodes
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -128,7 +140,8 @@ int OnCalculate(const int rates_total,
     }
 
     double binSize = (highest - lowest) / InpBins;
-    if(binSize <= 0) return(rates_total);
+    if(binSize <= 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
 
     // Calculate volume per price bin
     double volBin[];

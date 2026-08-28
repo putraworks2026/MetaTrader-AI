@@ -162,5 +162,6 @@ void OnStart()
 
     PrintFormat("Breakeven complete: %d modified, %d skipped, %d failed", modified, skipped, failed);
 }
+    ML_LogExecution(EXEC_SUCCESS, 0, "Set Breakeven completed");
     ML_OnDeinit();
 }

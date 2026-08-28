@@ -40,6 +40,18 @@ input int      InpMaxFVGs       = 30;         // Max FVGs to display
 input bool     InpHideFilled     = false;      // Hide filled FVGs
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -105,7 +117,8 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
 {
     if(rates_total < 5) return(0);
-    if(time[rates_total-1] == g_lastBar && prev_calculated > 0) return(rates_total);
+    if(time[rates_total-1] == g_lastBar && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     g_lastBar = time[rates_total-1];
 
     int start = (prev_calculated == 0) ? MathMax(rates_total - InpLookback, 3) : prev_calculated - 1;

@@ -41,6 +41,18 @@ input string   InpCustomLevels    = "0,0.236,0.382,0.5,0.618,0.786,1.0"; // Fib 
 input string   InpExtLevels       = "1.272,1.414,1.618,2.0";            // Extension levels
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -129,7 +141,8 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
 {
     if(rates_total < InpSwingPeriod * 2 + 5) return(0);
-    if(time[rates_total-1] == g_lastBar && prev_calculated > 0) return(rates_total);
+    if(time[rates_total-1] == g_lastBar && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     g_lastBar = time[rates_total-1];
 
     // Find the most recent significant swing high and low

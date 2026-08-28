@@ -166,5 +166,6 @@ void OnStart()
         ShellExecute("open", TerminalInfoString(TERMINAL_DATA_PATH) + "\\MQL5\\Files\\", "", "", SW_SHOW);
     }
 }
+    ML_LogExecution(EXEC_SUCCESS, 0, "Export to CSV completed");
     ML_OnDeinit();
 }

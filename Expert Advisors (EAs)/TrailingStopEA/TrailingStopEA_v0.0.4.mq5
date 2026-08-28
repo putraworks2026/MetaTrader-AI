@@ -59,6 +59,88 @@ input bool     InpManageOnlySymbol    = false;          // Only current symbol
 input int      InpUpdateFrequency     = 1;             // Update every N seconds
 
 
+
+//==================================================================
+//  ML POSITION TRACKING (Trade Closure Detection)
+//==================================================================
+struct ML_PosTrack {
+    ulong  ticket;
+    double openPrice;
+    double volume;
+    int    type;
+    datetime openTime;
+};
+
+ML_PosTrack g_tracked[];
+int g_trackedCount = 0;
+datetime g_lastDashUpdate = 0;
+
+void ML_TrackPositions()
+{
+    // Detect closed positions
+    for(int i = g_trackedCount - 1; i >= 0; i--)
+    {
+        if(!PositionSelectByTicket(g_tracked[i].ticket))
+        {
+            // Position has closed — get result from history
+            HistorySelect(g_tracked[i].openTime, TimeCurrent() + 1);
+            double profit = 0;
+            int deals = HistoryDealsTotal();
+            for(int d = 0; d < deals; d++)
+            {
+                ulong dealTicket = HistoryDealGetTicket(d);
+                if(HistoryDealGetInteger(dealTicket, DEAL_POSITION_ID) == g_tracked[i].ticket)
+                {
+                    if((ENUM_DEAL_ENTRY)HistoryDealGetInteger(dealTicket, DEAL_ENTRY) == DEAL_ENTRY_OUT)
+                    {
+                        profit += HistoryDealGetDouble(dealTicket, DEAL_PROFIT);
+                        profit += HistoryDealGetDouble(dealTicket, DEAL_SWAP);
+                        profit += HistoryDealGetDouble(dealTicket, DEAL_COMMISSION);
+                    }
+                }
+            }
+            
+            bool won = (profit > 0);
+            ML_OnTradeClosed(profit, won);
+            
+            // Remove from tracking
+            g_tracked[i] = g_tracked[g_trackedCount - 1];
+            g_trackedCount--;
+            ArrayResize(g_tracked, g_trackedCount);
+        }
+    }
+    
+    // Add new positions to tracking
+    for(int i = 0; i < PositionsTotal(); i++)
+    {
+        ulong ticket = PositionGetTicket(i);
+        if(ticket == 0) continue;
+        
+        bool found = false;
+        for(int j = 0; j < g_trackedCount; j++)
+        {
+            if(g_tracked[j].ticket == ticket) { found = true; break; }
+        }
+        if(!found)
+        {
+            ArrayResize(g_tracked, g_trackedCount + 1);
+            g_tracked[g_trackedCount].ticket = ticket;
+            g_tracked[g_trackedCount].openPrice = PositionGetDouble(POSITION_PRICE_OPEN);
+            g_tracked[g_trackedCount].volume = PositionGetDouble(POSITION_VOLUME);
+            g_tracked[g_trackedCount].type = (int)PositionGetInteger(POSITION_TYPE);
+            g_tracked[g_trackedCount].openTime = (datetime)PositionGetInteger(POSITION_TIME);
+            g_trackedCount++;
+        }
+    }
+    
+    // Update dashboard every 30 seconds
+    if(TimeCurrent() - g_lastDashUpdate >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastDashUpdate = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML ENGINE INTEGRATION
 //==================================================================
@@ -81,6 +163,7 @@ void ML_Init()
 void ML_OnTick()
 {
     if(g_newsManager.IsNewsBlocked()) return;
+    ML_TrackPositions();
 }
 
 void ML_OnDeinit()

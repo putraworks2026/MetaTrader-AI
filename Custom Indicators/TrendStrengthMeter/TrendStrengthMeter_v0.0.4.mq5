@@ -45,6 +45,18 @@ input bool     InpAlertOnFlip     = true;     // Alert when trend flips
 input string   InpTimeframes      = "M5,M15,M30,H1,H4,D1,W1"; // Timeframes to show
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -156,7 +168,8 @@ int OnCalculate(const int rates_total,
 
     // Update every 30 seconds to reduce load
     static datetime lastUpdate = 0;
-    if(TimeCurrent() - lastUpdate < 30 && prev_calculated > 0) return(rates_total);
+    if(TimeCurrent() - lastUpdate < 30 && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     lastUpdate = TimeCurrent();
 
     // Dashboard header

@@ -43,6 +43,18 @@ input bool     InpAlertOnTouch    = true;     // Alert when price touches S/R
 input bool     InpExtendLines     = true;     // Extend to right
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -108,7 +120,8 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
 {
     if(rates_total < InpSwingPeriod * 2 + 5) return(0);
-    if(time[rates_total-1] == g_lastBar && prev_calculated > 0) return(rates_total);
+    if(time[rates_total-1] == g_lastBar && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     g_lastBar = time[rates_total-1];
 
     int start = (prev_calculated == 0) ? MathMax(rates_total - InpLookback, InpSwingPeriod + 1) : prev_calculated - 1;

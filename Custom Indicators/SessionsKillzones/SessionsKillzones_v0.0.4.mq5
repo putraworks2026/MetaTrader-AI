@@ -56,6 +56,18 @@ input bool     InpShowLabels     = true;      // Show session labels
 input bool     InpAlertOnOpen   = true;       // Alert when session opens
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -122,7 +134,8 @@ int OnCalculate(const int rates_total,
 
     // Only redraw on new bar
     static datetime lastBar = 0;
-    if(time[rates_total-1] == lastBar && prev_calculated > 0) return(rates_total);
+    if(time[rates_total-1] == lastBar && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     lastBar = time[rates_total-1];
 
     ObjectsDeleteAll(0, "SES_");

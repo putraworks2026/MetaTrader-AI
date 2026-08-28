@@ -41,6 +41,18 @@ input bool     InpAlertOnTouch    = true;       // Alert on price touching zone
 input int      InpMaxZones        = 10;         // Max zones to display
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -115,7 +127,8 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
 {
     if(rates_total < InpLookback + 10) return(0);
-    if(time[rates_total - 1] == g_lastBarTime && prev_calculated > 0) return(rates_total);
+    if(time[rates_total - 1] == g_lastBarTime && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     g_lastBarTime = time[rates_total - 1];
 
     int start = MathMax(prev_calculated == 0 ? rates_total - InpLookback : prev_calculated - 1, 10);

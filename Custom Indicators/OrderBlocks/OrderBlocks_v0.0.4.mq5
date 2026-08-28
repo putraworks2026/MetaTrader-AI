@@ -40,6 +40,18 @@ input int      InpMaxBlocks       = 15;         // Max blocks to display
 input bool     InpRemoveMitted    = true;       // Remove mitigated (tested) blocks
 
 
+
+datetime g_lastSignalDash = 0;
+
+void ML_SignalDashboardUpdate()
+{
+    if(TimeCurrent() - g_lastSignalDash >= 30)
+    {
+        ML_UpdateDashboard();
+        g_lastSignalDash = TimeCurrent();
+    }
+}
+
 //==================================================================
 //  ML SIGNAL ENGINE INTEGRATION
 //==================================================================
@@ -106,7 +118,8 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
 {
     if(rates_total < InpLookback + 5) return(0);
-    if(time[rates_total - 1] == g_lastBarTime && prev_calculated > 0) return(rates_total);
+    if(time[rates_total - 1] == g_lastBarTime && prev_calculated > 0)     ML_SignalDashboardUpdate();
+    return(rates_total);
     g_lastBarTime = time[rates_total - 1];
 
     int start = (prev_calculated == 0) ? rates_total - InpLookback : prev_calculated - 1;

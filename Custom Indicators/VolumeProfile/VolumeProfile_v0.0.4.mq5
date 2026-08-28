@@ -111,7 +111,7 @@ int OnInit()
     ArrayInitialize(BufferVolume, 0.0);
     ArrayInitialize(BufferColor, 0.0);
 
-    return(INIT_SUCCEEDED);
+    return(INIT_SUCCEEDED;;
 }
 
 int OnCalculate(const int rates_total,

@@ -14,4 +14,6 @@
 
 
 
+#include <Trade/Trade.mqh>
+
 #endif // __SETBREAKEVENALL_MQH__

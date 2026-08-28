@@ -99,7 +99,7 @@ int OnInit()
     ArrayResize(g_blocks, InpMaxBlocks);
     g_blockCount = 0;
     ObjectsDeleteAll(0, "OB_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

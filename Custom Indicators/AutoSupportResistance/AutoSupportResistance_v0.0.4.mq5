@@ -102,7 +102,7 @@ int OnInit()
     ArrayResize(g_levels, InpMaxLevels);
     g_count = 0;
     ObjectsDeleteAll(0, "SR_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

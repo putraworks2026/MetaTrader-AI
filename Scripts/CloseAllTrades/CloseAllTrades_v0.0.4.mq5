@@ -113,7 +113,6 @@ void OnStart()
     }
 
     PrintFormat("Close All complete: %d closed, %d failed, P/L: %.2f", closed, failed, totalProfit);
-}
     ML_LogExecution(EXEC_SUCCESS, 0, "Close Positions completed");
     ML_OnDeinit();
 }

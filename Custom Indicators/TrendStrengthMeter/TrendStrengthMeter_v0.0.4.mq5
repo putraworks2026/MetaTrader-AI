@@ -128,7 +128,7 @@ int OnInit()
     }
 
     ObjectsDeleteAll(0, "TSM_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason)

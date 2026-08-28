@@ -256,21 +256,6 @@ int OnCalculate(const int rates_total,
 //+------------------------------------------------------------------+
 
 //+------------------------------------------------------------------+
-void DetectOrderBlocks(const double &open[], const double &high[], const double &low[],
-                       const double &close[], const datetime &time[], int rates_total, int begin)
-{
-    if(!InpShowOB) return;
-
-    for(int i = begin; i < rates_total - 2; i++)
-    {
-        double impulse = MathAbs(close[i+1] - open[i+1]) / _Point;
-        if(impulse < 100) continue;
-
-        bool bullish = close[i+1] > open[i+1];
-        int obIdx = -1;
-        for(int j = i; j >= MathMax(i - 3, 0); j--)
-        {
-            if(bullish && close[j] < open[j]) { obIdx = j; break; }
             if(!bullish && close[j] > open[j]) { obIdx = j; break; }
         }
         if(obIdx < 0) continue;

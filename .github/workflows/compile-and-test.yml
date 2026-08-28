@@ -61,6 +61,17 @@ jobs:
           if (-not (Test-Path $me)) { Write-Host "ERROR: metaeditor64.exe not found!"; exit 1 }
           Write-Host "MetaEditor found: $me"
 
+      - name: Initialize MT5 terminal (first run)
+        shell: powershell
+        run: |
+          $mtDir = $env:MT5_PATH
+          $terminal = Join-Path $mtDir "terminal64.exe"
+          Write-Host "Starting terminal briefly to initialize MQL5 data directory..."
+          $p = Start-Process -FilePath $terminal -PassThru
+          Start-Sleep -Seconds 30
+          $p | Stop-Process -Force -ErrorAction SilentlyContinue
+          Write-Host "Terminal initialized"
+
       - name: Setup MQL5 directories & copy tools
         shell: powershell
         run: |
@@ -105,17 +116,21 @@ jobs:
           }
           Write-Host "Found $($mq5Files.Count) .mq5 files to compile"
           $errors = 0; $compiled = 0
+          $incDir = Join-Path $env:MT5_PATH "MQL5\Include"
           foreach ($f in $mq5Files) {
             Write-Host "Compiling: $($f.FullName)"
             $logFile = "$($f.FullName).log"
-            & $me /compile:"$($f.FullName)" /log:"$logFile"
-            Start-Sleep -Seconds 2
+            & $me /compile:"$($f.FullName)" /log:"$logFile" /inc:"$incDir"
+            Start-Sleep -Seconds 5
             $ex5 = [System.IO.Path]::ChangeExtension($f.FullName, ".ex5")
             if (Test-Path $ex5) { Write-Host "  OK"; $compiled++ }
-            else { Write-Host "  FAIL"; $errors++ }
-            if (Test-Path $logFile) {
-              $log = Get-Content $logFile -Raw
-              if ($log -match "error") { Write-Host "  LOG: $log" }
+            else {
+              Write-Host "  FAIL"
+              $errors++
+              if (Test-Path $logFile) {
+                $log = Get-Content $logFile -Raw
+                Write-Host "  LOG: $log"
+              }
             }
           }
           Write-Host "===================================="

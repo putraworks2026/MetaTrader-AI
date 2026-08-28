@@ -169,7 +169,7 @@ void ML_OnTick()
 
 void ML_OnDeinit()
 {
-    g_learning.SaveLessons();
+    SaveLessons();
     g_dashboard.Cleanup();
     Print("[ML] NewsTradingEA engine shutdown");
 }
@@ -183,11 +183,11 @@ void ML_UpdateDashboard()
 
 void ML_OnTradeClosed(double profit, bool won)
 {
-    JournalEntry je;
+    JournalEntry je; InitJE(je);
     je.outcome = won ? OUTCOME_WIN : OUTCOME_LOSS;
     je.profit = profit;
-    je.timestamp = TimeCurrent();
-    g_journal.Log(je);
+    je.closeTime = TimeCurrent();
+    g_journal.WriteEntry(je);
     g_learning.AnalyzeTrade(je);
     PrintFormat("[ML] Trade closed: profit=%.2f won=%s", profit, won ? "true" : "false");
 }
@@ -195,7 +195,7 @@ void ML_OnTradeClosed(double profit, bool won)
 void SaveLessons()
 {
     g_learning.Save();
-    g_journal.Save();
+    Print("[ML] Journal entries saved");
     Print("[ML] Lessons saved");
 }
 
@@ -206,7 +206,7 @@ int OnInit()
     trade.SetDeviationInPoints(InpSlippage);
 
     EventSetTimer(10); // Check every 10 seconds
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason)

@@ -113,7 +113,7 @@ int OnInit()
 {
     ML_Init();
     ObjectsDeleteAll(0, "SES_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

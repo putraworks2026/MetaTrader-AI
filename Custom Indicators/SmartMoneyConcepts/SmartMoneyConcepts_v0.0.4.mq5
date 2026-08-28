@@ -109,7 +109,7 @@ int OnInit()
     g_fvgCount = 0;
     g_obCount = 0;
     ObjectsDeleteAll(0, "SMC_");
-    return(INIT_SUCCEEDED);
+    return(INIT_SUCCEEDED;;
 }
 
 void OnDeinit(const int reason) {
@@ -254,83 +254,6 @@ int OnCalculate(const int rates_total,
 }
 
 //+------------------------------------------------------------------+
-void DetectStructure(const datetime &time[], const double &close[], int rates_total)
-{
-    // Need at least 2 swing highs and 2 swing lows
-    if(g_swingHighCount < 2 || g_swingLowCount < 2) return;
-
-    // Compare last two swing highs
-    int hi = g_swingHighCount - 1;
-    int li = g_swingLowCount - 1;
-
-    // BOS: price breaks above previous swing high (bullish BOS) or below previous swing low (bearish BOS)
-    if(hi >= 1)
-    {
-        if(close[rates_total - 1] > g_swingHighs[hi-1].price && g_lastTrend != 1)
-        {
-            // Check if this is BOS (continuation) or CHoCH (reversal)
-            bool isCHoCH = (g_lastTrend == -1);
-
-            if(InpShowBOS)
-            {
-                string name = "SMC_BOS_" + IntegerToString(g_swingHighs[hi-1].time);
-                ObjectCreate(0, name, OBJ_HLINE, 0, g_swingHighs[hi-1].time, g_swingHighs[hi-1].price);
-                ObjectSetInteger(0, name, OBJPROP_COLOR, isCHoCH ? InpCHoCHColor : InpBOSColor);
-                ObjectSetInteger(0, name, OBJPROP_WIDTH, 1);
-                ObjectSetInteger(0, name, OBJPROP_STYLE, STYLE_DASH);
-                ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
-                ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
-
-                string label = isCHoCH ? "CHoCH (Bullish)" : "BOS (Bullish)";
-                string labelName = "SMC_BOSLabel_" + IntegerToString(g_swingHighs[hi-1].time);
-                ObjectCreate(0, labelName, OBJ_TEXT, 0, g_swingHighs[hi-1].time, g_swingHighs[hi-1].price);
-                ObjectSetString(0, labelName, OBJPROP_TEXT, label);
-                ObjectSetInteger(0, labelName, OBJPROP_COLOR, isCHoCH ? InpCHoCHColor : InpBOSColor);
-                ObjectSetInteger(0, labelName, OBJPROP_FONTSIZE, 8);
-                ObjectSetInteger(0, labelName, OBJPROP_SELECTABLE, false);
-                ObjectSetInteger(0, labelName, OBJPROP_HIDDEN, true);
-            }
-
-            g_lastTrend = 1;
-
-            if(InpAlerts)
-                Alert(isCHoCH ? "CHoCH: Bullish reversal detected!" : "BOS: Bullish structure confirmed!");
-        }
-    }
-
-    if(li >= 1)
-    {
-        if(close[rates_total - 1] < g_swingLows[li-1].price && g_lastTrend != -1)
-        {
-            bool isCHoCH = (g_lastTrend == 1);
-
-            if(InpShowBOS)
-            {
-                string name = "SMC_BOS_" + IntegerToString(g_swingLows[li-1].time);
-                ObjectCreate(0, name, OBJ_HLINE, 0, g_swingLows[li-1].time, g_swingLows[li-1].price);
-                ObjectSetInteger(0, name, OBJPROP_COLOR, isCHoCH ? InpCHoCHColor : InpBOSColor);
-                ObjectSetInteger(0, name, OBJPROP_WIDTH, 1);
-                ObjectSetInteger(0, name, OBJPROP_STYLE, STYLE_DASH);
-                ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
-                ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
-
-                string label = isCHoCH ? "CHoCH (Bearish)" : "BOS (Bearish)";
-                string labelName = "SMC_BOSLabel_" + IntegerToString(g_swingLows[li-1].time);
-                ObjectCreate(0, labelName, OBJ_TEXT, 0, g_swingLows[li-1].time, g_swingLows[li-1].price);
-                ObjectSetString(0, labelName, OBJPROP_TEXT, label);
-                ObjectSetInteger(0, labelName, OBJPROP_COLOR, isCHoCH ? InpCHoCHColor : InpBOSColor);
-                ObjectSetInteger(0, labelName, OBJPROP_FONTSIZE, 8);
-                ObjectSetInteger(0, labelName, OBJPROP_SELECTABLE, false);
-                ObjectSetInteger(0, labelName, OBJPROP_HIDDEN, true);
-            }
-
-            g_lastTrend = -1;
-
-            if(InpAlerts)
-                Alert(isCHoCH ? "CHoCH: Bearish reversal detected!" : "BOS: Bearish structure confirmed!");
-        }
-    }
-}
 
 //+------------------------------------------------------------------+
 void DetectOrderBlocks(const double &open[], const double &high[], const double &low[],
@@ -375,45 +298,3 @@ void DetectOrderBlocks(const double &open[], const double &high[], const double 
 }
 
 //+------------------------------------------------------------------+
-void DrawAll(datetime endTime)
-{
-    // Draw FVGs
-    if(InpShowFVG)
-    {
-        for(int f = 0; f < g_fvgCount; f++)
-        {
-            if(g_fvgs[f].filled) continue;
-
-            string name = "SMC_FVG_" + IntegerToString(f);
-            ObjectCreate(0, name, OBJ_RECTANGLE, 0,
-                         g_fvgs[f].time, g_fvgs[f].high,
-                         endTime, g_fvgs[f].low);
-            ObjectSetInteger(0, name, OBJPROP_COLOR, InpFVGColor);
-            ObjectSetInteger(0, name, OBJPROP_BACK, true);
-            ObjectSetInteger(0, name, OBJPROP_FILL, true);
-            ObjectSetInteger(0, name, OBJPROP_WIDTH, 0);
-            ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
-            ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
-        }
-    }
-
-    // Draw Order Blocks
-    if(InpShowOB)
-    {
-        for(int b = 0; b < g_obCount; b++)
-        {
-            if(g_obs[b].mitigated) continue;
-
-            string name = "SMC_OB_" + IntegerToString(b);
-            ObjectCreate(0, name, OBJ_RECTANGLE, 0,
-                         g_obs[b].time, g_obs[b].high,
-                         endTime, g_obs[b].low);
-            ObjectSetInteger(0, name, OBJPROP_COLOR, g_obs[b].bullish ? InpBullOBColor : InpBearOBColor);
-            ObjectSetInteger(0, name, OBJPROP_BACK, true);
-            ObjectSetInteger(0, name, OBJPROP_FILL, true);
-            ObjectSetInteger(0, name, OBJPROP_WIDTH, 0);
-            ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
-            ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
-        }
-    }
-}

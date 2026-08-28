@@ -98,7 +98,7 @@ int OnInit()
     ArrayResize(g_zones, InpMaxZones);
     g_count = 0;
     ObjectsDeleteAll(0, "LIQ_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

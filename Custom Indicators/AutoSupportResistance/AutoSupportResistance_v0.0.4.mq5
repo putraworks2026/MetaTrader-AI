@@ -178,24 +178,3 @@ int OnCalculate(const int rates_total,
     return(rates_total);
 }
 
-    }
-
-    // New level
-    if(g_count >= InpMaxLevels)
-    {
-        // Remove level with fewest touches
-        int minIdx = 0;
-        for(int l = 1; l < g_count; l++)
-            if(g_levels[l].touches < g_levels[minIdx].touches) minIdx = l;
-        g_levels[minIdx] = g_levels[g_count - 1];
-        g_count--;
-    }
-
-    g_levels[g_count].price         = price;
-    g_levels[g_count].touches       = 1;
-    g_levels[g_count].is_resistance = isRes;
-    g_levels[g_count].lastTouch     = t;
-    g_levels[g_count].name          = StringFormat("SR_%d", g_count);
-    g_count++;
-}
-

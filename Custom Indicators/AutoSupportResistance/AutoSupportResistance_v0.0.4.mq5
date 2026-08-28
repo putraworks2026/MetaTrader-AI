@@ -178,18 +178,6 @@ int OnCalculate(const int rates_total,
     return(rates_total);
 }
 
-void AddOrUpdateLevel(double price, datetime t, bool isRes, double tolerance,
-                      int rates_total, const datetime &time[], const double &high[], const double &low[])
-{
-    // Check if this price matches an existing level
-    for(int l = 0; l < g_count; l++)
-    {
-        if(MathAbs(price - g_levels[l].price) <= tolerance)
-        {
-            g_levels[l].touches++;
-            g_levels[l].lastTouch = t;
-            return;
-        }
     }
 
     // New level

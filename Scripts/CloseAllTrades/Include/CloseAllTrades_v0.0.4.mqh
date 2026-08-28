@@ -14,4 +14,6 @@
 
 
 
+#include <Trade/Trade.mqh>
+
 #endif // __CLOSEALLTRADES_MQH__

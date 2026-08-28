@@ -123,7 +123,7 @@ int OnInit()
         g_extCount++;
     }
 
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

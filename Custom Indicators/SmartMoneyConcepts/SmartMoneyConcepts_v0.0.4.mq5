@@ -254,32 +254,3 @@ int OnCalculate(const int rates_total,
 }
 
 //+------------------------------------------------------------------+
-
-//+------------------------------------------------------------------+
-            if(!bullish && close[j] > open[j]) { obIdx = j; break; }
-        }
-        if(obIdx < 0) continue;
-
-        bool exists = false;
-        for(int b = 0; b < g_obCount; b++)
-        {
-            if(g_obs[b].time == time[obIdx]) { exists = true; break; }
-        }
-        if(exists) continue;
-
-        if(g_obCount >= InpMaxOB)
-        {
-            for(int s = 0; s < g_obCount - 1; s++) g_obs[s] = g_obs[s+1];
-            g_obCount--;
-        }
-
-        g_obs[g_obCount].high      = high[obIdx];
-        g_obs[g_obCount].low       = low[obIdx];
-        g_obs[g_obCount].time      = time[obIdx];
-        g_obs[g_obCount].bullish   = bullish;
-        g_obs[g_obCount].mitigated  = false;
-        g_obCount++;
-    }
-}
-
-//+------------------------------------------------------------------+

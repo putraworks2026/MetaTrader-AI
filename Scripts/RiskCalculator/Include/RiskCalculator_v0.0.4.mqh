@@ -14,4 +14,6 @@
 
 
 
+#include <Trade/Trade.mqh>
+
 #endif // __RISKCALCULATOR_MQH__

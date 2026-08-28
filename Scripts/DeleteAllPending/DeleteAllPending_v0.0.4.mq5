@@ -116,7 +116,6 @@ void OnStart()
     }
 
     PrintFormat("Delete All Pending complete: %d deleted, %d failed", deleted, failed);
-}
     ML_LogExecution(EXEC_SUCCESS, 0, "Delete Pending Orders completed");
     ML_OnDeinit();
 }

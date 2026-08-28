@@ -102,7 +102,7 @@ int OnInit()
     ArrayResize(g_levels, InpMaxLevels);
     g_count = 0;
     ObjectsDeleteAll(0, "SR_");
-    return(INIT_SUCCEEDED);
+    return(INIT_SUCCEEDED;;
 }
 
 void OnDeinit(const int reason) {
@@ -211,40 +211,3 @@ void AddOrUpdateLevel(double price, datetime t, bool isRes, double tolerance,
     g_count++;
 }
 
-void DrawLevels(datetime endTime)
-{
-    ObjectsDeleteAll(0, "SR_");
-
-    for(int l = 0; l < g_count; l++)
-    {
-        if(g_levels[l].touches < InpMinTouches) continue;
-
-        string name = "SR_Line_" + IntegerToString(l);
-        ObjectCreate(0, name, OBJ_TREND, 0,
-                     g_levels[l].lastTouch, g_levels[l].price,
-                     endTime, g_levels[l].price);
-
-        color clr = g_levels[l].is_resistance ? InpResistColor : InpSupportColor;
-        ObjectSetInteger(0, name, OBJPROP_COLOR, clr);
-        ObjectSetInteger(0, name, OBJPROP_WIDTH, InpLineWidth);
-        ObjectSetInteger(0, name, OBJPROP_STYLE, InpLineStyle);
-        ObjectSetInteger(0, name, OBJPROP_RAY_RIGHT, InpExtendLines);
-        ObjectSetInteger(0, name, OBJPROP_SELECTABLE, false);
-        ObjectSetInteger(0, name, OBJPROP_HIDDEN, true);
-
-        if(InpShowLabels)
-        {
-            string label = StringFormat("%s %.5f x%d",
-                g_levels[l].is_resistance ? "R" : "S",
-                g_levels[l].price,
-                g_levels[l].touches);
-            string lblName = "SR_Label_" + IntegerToString(l);
-            ObjectCreate(0, lblName, OBJ_TEXT, 0, g_levels[l].lastTouch, g_levels[l].price);
-            ObjectSetString(0, lblName, OBJPROP_TEXT, label);
-            ObjectSetInteger(0, lblName, OBJPROP_COLOR, clr);
-            ObjectSetInteger(0, lblName, OBJPROP_FONTSIZE, 8);
-            ObjectSetInteger(0, lblName, OBJPROP_SELECTABLE, false);
-            ObjectSetInteger(0, lblName, OBJPROP_HIDDEN, true);
-        }
-    }
-}

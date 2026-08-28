@@ -1,0 +1,286 @@
+# PutraWorks MetaTrader-AI — Compile & Strategy Test
+name: Compile & Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      symbol:
+        description: "Symbol to test"
+        default: "XAUUSD"
+        type: string
+      period:
+        description: "Timeframe"
+        default: "H1"
+        type: choice
+        options: [M1, M5, M15, M30, H1, H4, D1]
+      from_date:
+        description: "Start date (YYYY.MM.DD)"
+        default: "2025.01.01"
+        type: string
+      to_date:
+        description: "End date (YYYY.MM.DD)"
+        default: "2025.06.01"
+        type: string
+      test_model:
+        description: "Test model (0=Every Tick, 1=1-min OHLC, 2=Open Prices)"
+        default: "1"
+        type: choice
+        options: ["0", "1", "2"]
+  push:
+    branches: [main]
+    paths:
+      - "**/*.mq5"
+      - "**/*.mqh"
+      - ".github/workflows/compile-and-test.yml"
+
+env:
+  MT5_URL: "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe"
+
+jobs:
+  compile:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download & install MT5
+        shell: powershell
+        run: |
+          Write-Host "Downloading MT5 installer..."
+          $ProgressPreference = "SilentlyContinue"
+          Invoke-WebRequest -Uri "$env:MT5_URL" -OutFile "mt5setup.exe"
+          Write-Host "Installing MT5 (silent)..."
+          Start-Process -FilePath "mt5setup.exe" -ArgumentList "/auto" -Wait
+          Start-Sleep -Seconds 10
+          $mtDir = Get-ChildItem "C:\Program Files\MetaTrader*" -Directory | Select-Object -First 1 -ExpandProperty FullName
+          if (!$mtDir) { $mtDir = "C:\Program Files\MetaTrader 5" }
+          Write-Host "MT5 installed at: $mtDir"
+          echo "MT5_PATH=$mtDir" >> $env:GITHUB_ENV
+          $me = Join-Path $mtDir "metaeditor64.exe"
+          if (-not (Test-Path $me)) { Write-Host "ERROR: metaeditor64.exe not found!"; exit 1 }
+          Write-Host "MetaEditor found: $me"
+
+      - name: Setup MQL5 directories & copy tools
+        shell: powershell
+        run: |
+          $mtDir = $env:MT5_PATH
+          $mqlDir = Join-Path $mtDir "MQL5"
+          $tools = @(
+            @{ Src="Expert Advisors (EAs)"; Dest="Experts" },
+            @{ Src="Custom Indicators"; Dest="Indicators" },
+            @{ Src="Scripts"; Dest="Scripts" }
+          )
+          foreach ($t in $tools) {
+            if (Test-Path $t.Src) {
+              Get-ChildItem $t.Src -Directory | ForEach-Object {
+                $dest = Join-Path $mqlDir "$($t.Dest)\$($_.Name)"
+                Copy-Item $_.FullName $dest -Recurse -Force
+                Write-Host "Copied: $($t.Dest)/$($_.Name)"
+              }
+            }
+          }
+          $libSrc = "Libraries"
+          if (Test-Path $libSrc) {
+            Get-ChildItem $libSrc -Directory | ForEach-Object {
+              $inc = Join-Path $_.FullName "Include"
+              if (Test-Path $inc) {
+                Get-ChildItem $inc -Filter "*.mqh" | ForEach-Object {
+                  Copy-Item $_.FullName (Join-Path $mqlDir "Include\$($_.Name)") -Force
+                }
+              }
+            }
+          }
+          echo "MQL5_DIR=$mqlDir" >> $env:GITHUB_ENV
+
+      - name: Compile all .mq5 files
+        shell: powershell
+        run: |
+          $me = Join-Path $env:MT5_PATH "metaeditor64.exe"
+          $mqlDir = $env:MQL5_DIR
+          $mq5Files = Get-ChildItem $mqlDir -Recurse -Filter "*.mq5" | Where-Object {
+            $_.FullName -notmatch "Archive" -and $_.FullName -notmatch "Tests"
+          }
+          Write-Host "Found $($mq5Files.Count) .mq5 files to compile"
+          $errors = 0; $compiled = 0
+          foreach ($f in $mq5Files) {
+            Write-Host "Compiling: $($f.FullName)"
+            $logFile = "$($f.FullName).log"
+            & $me /compile:"$($f.FullName)" /log:"$logFile"
+            Start-Sleep -Seconds 2
+            $ex5 = [System.IO.Path]::ChangeExtension($f.FullName, ".ex5")
+            if (Test-Path $ex5) { Write-Host "  OK"; $compiled++ }
+            else { Write-Host "  FAIL"; $errors++ }
+            if (Test-Path $logFile) {
+              $log = Get-Content $logFile -Raw
+              if ($log -match "error") { Write-Host "  LOG: $log" }
+            }
+          }
+          Write-Host "===================================="
+          Write-Host "  Compiled: $compiled / $($mq5Files.Count)"
+          Write-Host "  Errors:   $errors"
+          Write-Host "===================================="
+          if ($errors -gt 0) { exit 1 }
+
+      - name: Upload compiled .ex5 files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-ex5
+          path: |
+            ${{ env.MT5_PATH }}/MQL5/Experts/**/*.ex5
+            ${{ env.MT5_PATH }}/MQL5/Indicators/**/*.ex5
+            ${{ env.MT5_PATH }}/MQL5/Scripts/**/*.ex5
+          retention-days: 7
+
+      - name: Upload compile logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-logs
+          path: ${{ env.MT5_PATH }}/MQL5/**/*.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  test:
+    needs: compile
+    runs-on: windows-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        ea: [BreakoutEA, GridTradingEA, NewsTradingEA, ScalpingEA, TrailingStopEA]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download & install MT5
+        shell: powershell
+        run: |
+          Write-Host "Downloading MT5 installer..."
+          $ProgressPreference = "SilentlyContinue"
+          Invoke-WebRequest -Uri "$env:MT5_URL" -OutFile "mt5setup.exe"
+          Write-Host "Installing MT5 (silent)..."
+          Start-Process -FilePath "mt5setup.exe" -ArgumentList "/auto" -Wait
+          Start-Sleep -Seconds 10
+          $mtDir = Get-ChildItem "C:\Program Files\MetaTrader*" -Directory | Select-Object -First 1 -ExpandProperty FullName
+          if (!$mtDir) { $mtDir = "C:\Program Files\MetaTrader 5" }
+          Write-Host "MT5 installed at: $mtDir"
+          echo "MT5_PATH=$mtDir" >> $env:GITHUB_ENV
+          $dataDir = "C:\MT5_Data"
+          New-Item -ItemType Directory -Force -Path $dataDir | Out-Null
+          echo "MT5_DATA=$dataDir" >> $env:GITHUB_ENV
+
+      - name: Download compiled .ex5 files
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-ex5
+          path: compiled-ex5
+
+      - name: Setup EA for strategy testing
+        shell: powershell
+        run: |
+          $mtDir = $env:MT5_PATH
+          $dataDir = $env:MT5_DATA
+          $eaName = "${{ matrix.ea }}"
+          $mqlDir = Join-Path $dataDir "MQL5"
+          $eaDir = Join-Path $mqlDir "Experts\$eaName"
+          New-Item -ItemType Directory -Force -Path $eaDir | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $eaDir "Include") | Out-Null
+          New-Item -ItemType Directory -Force -Path (Join-Path $mqlDir "Include") | Out-Null
+          $eaSrc = "Expert Advisors (EAs)\$eaName"
+          if (Test-Path $eaSrc) {
+            Copy-Item (Join-Path $eaSrc "*") $eaDir -Recurse -Force
+          }
+          $ex5 = Get-ChildItem "compiled-ex5" -Recurse -Filter "$eaName*.ex5" | Select-Object -First 1
+          if ($ex5) { Copy-Item $ex5.FullName $eaDir -Force; Write-Host "Copied .ex5" }
+          $stdInc = Join-Path $mtDir "MQL5\Include"
+          if (Test-Path $stdInc) { Copy-Item (Join-Path $stdInc "*") (Join-Path $mqlDir "Include") -Recurse -Force }
+          Write-Host "EA setup complete: $eaName"
+
+      - name: Create strategy tester config
+        shell: powershell
+        run: |
+          $configPath = Join-Path $env:MT5_DATA "tester.ini"
+          $config = @"
+          ; PutraWorks Strategy Tester Config
+          [Common]
+          Login=0
+          Password=
+          Server=MetaQuotes-Demo
+          AutoConfiguration=true
+          [Experts]
+          Enable=true
+          AllowDllImport=true
+          AllowTrading=true
+          [Tester]
+          Expert=${{ matrix.ea }}\${{ matrix.ea }}_v0.0.4
+          Symbol=${{ github.event.inputs.symbol || 'XAUUSD' }}
+          Period=${{ github.event.inputs.period || 'H1' }}
+          Model=${{ github.event.inputs.test_model || '1' }}
+          ForwardMode=0
+          FromDate=${{ github.event.inputs.from_date || '2025.01.01' }}
+          ToDate=${{ github.event.inputs.to_date || '2025.06.01' }}
+          Deposit=10000
+          Currency=USD
+          Leverage=100
+          Report=test_report
+          ReplaceReport=true
+          ShutdownTerminal=true
+          UseLocal=1
+          Visual=0
+          Optimize=0
+          "@
+          Set-Content -Path $configPath -Value $config -Encoding UTF8
+          Write-Host "Config created:"
+          Get-Content $configPath
+
+      - name: Run strategy tester
+        shell: powershell
+        run: |
+          $terminal = Join-Path $env:MT5_PATH "terminal64.exe"
+          $configPath = Join-Path $env:MT5_DATA "tester.ini"
+          Write-Host "Starting MT5 Strategy Tester..."
+          $process = Start-Process -FilePath $terminal -ArgumentList "/portable", "/config:$configPath" -PassThru
+          $timeout = 20 * 60
+          $elapsed = 0
+          while (!$process.HasExited -and $elapsed -lt $timeout) {
+            Start-Sleep -Seconds 10
+            $elapsed += 10
+            Write-Host "Waiting... ($elapsed s elapsed)"
+            $report = Join-Path $env:MT5_DATA "test_report.htm"
+            if (Test-Path $report) { Write-Host "Report found!"; break }
+          }
+          if (!$process.HasExited) { Write-Host "Timeout, stopping..."; $process | Stop-Process -Force }
+          $report = Join-Path $env:MT5_DATA "test_report.htm"
+          if (Test-Path $report) {
+            Write-Host "Test report: $((Get-Item $report).Length) bytes"
+            $content = Get-Content $report -Raw
+            if ($content -match "Total Net Profit.*?([-\d,.]+)") { Write-Host "Net Profit: $($matches[1])" }
+            if ($content -match "Profit Factor.*?([\d.]+)") { Write-Host "Profit Factor: $($matches[1])" }
+            if ($content -match "Total Trades.*?(\d+)") { Write-Host "Total Trades: $($matches[1])" }
+          } else {
+            Write-Host "::warning::No test report for ${{ matrix.ea }}"
+          }
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ matrix.ea }}
+          path: ${{ env.MT5_DATA }}/test_report.*
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload tester logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tester-logs-${{ matrix.ea }}
+          path: |
+            ${{ env.MT5_DATA }}/**/*.log
+            ${{ env.MT5_DATA }}/tester.ini
+          retention-days: 7
+          if-no-files-found: ignore

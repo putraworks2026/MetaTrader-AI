@@ -99,7 +99,7 @@ int OnInit()
     ArrayResize(g_fvgs, InpMaxFVGs);
     g_count = 0;
     ObjectsDeleteAll(0, "FVG_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

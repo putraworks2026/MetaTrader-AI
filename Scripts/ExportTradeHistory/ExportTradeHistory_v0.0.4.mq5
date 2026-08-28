@@ -163,9 +163,8 @@ void OnStart()
 
     if(InpShowInFolder)
     {
-        ShellExecute("open", TerminalInfoString(TERMINAL_DATA_PATH) + "\\MQL5\\Files\\", "", "", SW_SHOW);
+        Print("Export saved to: " + TerminalInfoString(TERMINAL_DATA_PATH) + "\\MQL5\\Files\\");
     }
-}
     ML_LogExecution(EXEC_SUCCESS, 0, "Export to CSV completed");
     ML_OnDeinit();
 }

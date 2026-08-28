@@ -11,7 +11,7 @@
 #property description "Ideal for: News traders who want to automate event-driven volatility capture."
 #property strict
 
-#include "Include/NewsTradingEA_v0.0.4.mqh"
+#include "Include\\NewsTradingEA_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\Config_v0.0.4.mqh"
 #include "Include\\IndicatorEngine_v0.0.4.mqh"

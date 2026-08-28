@@ -11,7 +11,7 @@
 #property description "Ideal for: Breakout traders who want automated execution with volume confirmation."
 #property strict
 
-#include "Include/BreakoutEA_v0.0.4.mqh"
+#include "Include\\BreakoutEA_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\Config_v0.0.4.mqh"
 #include "Include\\IndicatorEngine_v0.0.4.mqh"

@@ -8,7 +8,7 @@
 #property indicator_chart_window
 #property indicator_plots 0
 
-#include "Include/AutoSupportResistance_v0.0.4.mqh"
+#include "Include\\AutoSupportResistance_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\SignalConfig_v0.0.4.mqh"
 #include "Include\\SignalJournal_v0.0.4.mqh"

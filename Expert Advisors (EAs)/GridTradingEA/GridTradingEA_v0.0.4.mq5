@@ -11,7 +11,7 @@
 #property description "Ideal for: Range traders who want set-and-forget grid profitability."
 #property strict
 
-#include "Include/GridTradingEA_v0.0.4.mqh"
+#include "Include\\GridTradingEA_v0.0.4.mqh"
 //--- ML Engine Includes (Tool-Specific)
 #include "Include\\Config_v0.0.4.mqh"
 #include "Include\\IndicatorEngine_v0.0.4.mqh"

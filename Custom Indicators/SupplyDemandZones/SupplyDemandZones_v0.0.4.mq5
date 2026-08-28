@@ -100,7 +100,7 @@ int OnInit()
     ArrayResize(g_zones, InpMaxZones);
     g_zoneCount = 0;
     CleanupObjects();
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason)

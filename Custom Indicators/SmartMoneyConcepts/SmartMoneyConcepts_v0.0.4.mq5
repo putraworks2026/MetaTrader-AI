@@ -109,7 +109,7 @@ int OnInit()
     g_fvgCount = 0;
     g_obCount = 0;
     ObjectsDeleteAll(0, "SMC_");
-    return(INIT_SUCCEEDED;;
+    return(INIT_SUCCEEDED);
 }
 
 void OnDeinit(const int reason) {

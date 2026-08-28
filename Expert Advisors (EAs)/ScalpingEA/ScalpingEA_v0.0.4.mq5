@@ -184,6 +184,25 @@ void ML_UpdateDashboard()
         g_patterns.GetPatternCount(), g_optimizer.GetPendingCount(), g_riskManager.GetDailyPnL());
 }
 
+
+void ML_OnTradeClosed(double profit, bool won)
+{
+    JournalEntry je;
+    je.outcome = won ? OUTCOME_WIN : OUTCOME_LOSS;
+    je.profit = profit;
+    je.timestamp = TimeCurrent();
+    g_journal.Log(je);
+    g_learning.AnalyzeTrade(je);
+    PrintFormat("[ML] Trade closed: profit=%.2f won=%s", profit, won ? "true" : "false");
+}
+
+void SaveLessons()
+{
+    g_learning.Save();
+    g_journal.Save();
+    Print("[ML] Lessons saved");
+}
+
 int OnInit()
 {
     ML_Init();
@@ -200,7 +219,7 @@ int OnInit()
         return(INIT_FAILED);
     }
 
-    return(INIT_SUCCEEDED);
+    return(INIT_SUCCEEDED;;
 }
 
 void OnDeinit(const int reason)
@@ -276,63 +295,5 @@ void OnTick()
     lastBarTime = currentBar;
 }
 
-bool IsInSession()
-{
-    MqlDateTime dt;
-    TimeToStruct(TimeCurrent(), dt);
-    return (dt.hour >= InpStartHour && dt.hour < InpEndHour);
-}
 
-int CountPositions()
-{
-    int count = 0;
-    for(int i = 0; i < PositionsTotal(); i++)
-    {
-        ulong ticket = PositionGetTicket(i);
-        if(ticket == 0) continue;
-        if(PositionGetInteger(POSITION_MAGIC) == InpMagicNumber &&
-           PositionGetString(POSITION_SYMBOL) == _Symbol)
-            count++;
-    }
-    return count;
-}
 
-void ApplyTrailing()
-{
-    double point = _Point;
-    int digits = _Digits;
-
-    for(int i = 0; i < PositionsTotal(); i++)
-    {
-        ulong ticket = PositionGetTicket(i);
-        if(ticket == 0) continue;
-        if(PositionGetInteger(POSITION_MAGIC) != InpMagicNumber) continue;
-        if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
-
-        long type = PositionGetInteger(POSITION_TYPE);
-        double openPrice = PositionGetDouble(POSITION_PRICE_OPEN);
-        double currentSL = PositionGetDouble(POSITION_SL);
-        double currentTP = PositionGetDouble(POSITION_TP);
-        double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-        double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-
-        if(type == POSITION_TYPE_BUY)
-        {
-            if(bid - openPrice > InpTrailingStart * point)
-            {
-                double newSL = NormalizeDouble(bid - InpTrailingDistance * point, digits);
-                if(newSL > currentSL)
-                    trade.PositionModify(ticket, newSL, currentTP);
-            }
-        }
-        else if(type == POSITION_TYPE_SELL)
-        {
-            if(openPrice - ask > InpTrailingStart * point)
-            {
-                double newSL = NormalizeDouble(ask + InpTrailingDistance * point, digits);
-                if(currentSL == 0 || newSL < currentSL)
-                    trade.PositionModify(ticket, newSL, currentTP);
-            }
-        }
-    }
-}

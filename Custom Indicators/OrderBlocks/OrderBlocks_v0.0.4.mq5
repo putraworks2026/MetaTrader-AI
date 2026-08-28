@@ -99,7 +99,7 @@ int OnInit()
     ArrayResize(g_blocks, InpMaxBlocks);
     g_blockCount = 0;
     ObjectsDeleteAll(0, "OB_");
-    return(INIT_SUCCEEDED);
+    return(INIT_SUCCEEDED;;
 }
 
 void OnDeinit(const int reason) {
@@ -223,38 +223,3 @@ int OnCalculate(const int rates_total,
 }
 
 //+------------------------------------------------------------------+
-void DrawBlocks(datetime endTime)
-{
-    ObjectsDeleteAll(0, "OB_");
-
-    for(int b = 0; b < g_blockCount; b++)
-    {
-        if(g_blocks[b].mitigated && InpRemoveMitted) continue;
-
-        string rectName = "OB_Rect_" + IntegerToString(b);
-        string labelName = "OB_Label_" + IntegerToString(b);
-
-        ObjectCreate(0, rectName, OBJ_RECTANGLE, 0,
-                     g_blocks[b].time, g_blocks[b].high,
-                     endTime, g_blocks[b].low);
-
-        color clr = g_blocks[b].is_bullish ? InpBullOBColor : InpBearOBColor;
-        ObjectSetInteger(0, rectName, OBJPROP_COLOR, clr);
-        ObjectSetInteger(0, rectName, OBJPROP_BACK, InpFill);
-        ObjectSetInteger(0, rectName, OBJPROP_FILL, InpFill);
-        ObjectSetInteger(0, rectName, OBJPROP_WIDTH, 1);
-        ObjectSetInteger(0, rectName, OBJPROP_SELECTABLE, false);
-        ObjectSetInteger(0, rectName, OBJPROP_HIDDEN, true);
-
-        if(InpShowLabels)
-        {
-            string label = g_blocks[b].is_bullish ? "Bull OB" : "Bear OB";
-            ObjectCreate(0, labelName, OBJ_TEXT, 0, g_blocks[b].time, g_blocks[b].high);
-            ObjectSetString(0, labelName, OBJPROP_TEXT, label);
-            ObjectSetInteger(0, labelName, OBJPROP_COLOR, clr);
-            ObjectSetInteger(0, labelName, OBJPROP_FONTSIZE, 7);
-            ObjectSetInteger(0, labelName, OBJPROP_SELECTABLE, false);
-            ObjectSetInteger(0, labelName, OBJPROP_HIDDEN, true);
-        }
-    }
-}

@@ -154,7 +154,6 @@ void OnStart()
 
         PrintFormat("Order placed: %s %.2f lots at %.5f", EnumToString(InpDirection), lotSize, price);
     }
-}
     ML_LogExecution(EXEC_SUCCESS, 0, "Calculate Lot Size completed");
     ML_OnDeinit();
 }

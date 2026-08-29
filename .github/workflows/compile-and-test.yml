@@ -226,7 +226,7 @@ jobs:
   test:
     needs: compile
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -305,5 +305,7 @@ jobs:
           path: |
             ${{ env.USERPROFILE }}/MT5_TestData/report.html
             ${{ env.USERPROFILE }}/MT5_TestData/*.log
+            C:/Program Files/MetaTrader 5/report*.html
+            C:/Program Files/MetaTrader 5/MQL5/Tester/logs/*.log
           if-no-files-found: warn
           retention-days: 30
